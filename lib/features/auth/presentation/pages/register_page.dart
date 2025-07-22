@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
 import '../widgets/custom_button.dart';
@@ -31,46 +32,6 @@ class _RegisterPageState extends State<RegisterPage> {
     super.dispose();
   }
 
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email is required';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Enter a valid email';
-    }
-    return null;
-  }
-
-  String? _validateName(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Name is required';
-    }
-    if (value.length < 2) {
-      return 'Name must be at least 2 characters';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
-  }
-
-  String? _validateConfirmPassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Confirm password is required';
-    }
-    if (value != _passwordController.text) {
-      return 'Passwords do not match';
-    }
-    return null;
-  }
-
   void _register() {
     if (_formKey.currentState!.validate()) {
       context.read<AuthCubit>().register(
@@ -87,18 +48,17 @@ class _RegisterPageState extends State<RegisterPage> {
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
+          // Success - Navigate to Profile
           if (state.isAuthenticated && state.user != null) {
+            SnackBarHelper.showSuccess(context, 'Kayıt başarılı! Hoş geldiniz!');
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+            return;
           }
 
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 3),
-              ),
-            );
+          // Error - Show SnackBar
+          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+            SnackBarHelper.showError(context, state.errorMessage!);
+            context.read<AuthCubit>().clearError();
           }
         },
         builder: (context, state) {
@@ -152,7 +112,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       label: 'Full Name',
                       hint: 'Enter your full name',
                       controller: _nameController,
-                      validator: _validateName,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Name is required';
+                        }
+                        if (value.length < 2) {
+                          return 'Name must be at least 2 characters';
+                        }
+                        return null;
+                      },
                     ),
 
                     const SizedBox(height: 24),
@@ -163,7 +131,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       hint: 'Enter your email',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: _validateEmail,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email is required';
+                        }
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          return 'Enter a valid email';
+                        }
+                        return null;
+                      },
                     ),
 
                     const SizedBox(height: 24),
@@ -174,7 +150,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       hint: 'Enter your password',
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      validator: _validatePassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
                       suffixIcon: IconButton(
                         icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
                         onPressed: () {
@@ -193,7 +177,15 @@ class _RegisterPageState extends State<RegisterPage> {
                       hint: 'Confirm your password',
                       controller: _confirmPasswordController,
                       obscureText: _obscureConfirmPassword,
-                      validator: _validateConfirmPassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Confirm password is required';
+                        }
+                        if (value != _passwordController.text) {
+                          return 'Passwords do not match';
+                        }
+                        return null;
+                      },
                       suffixIcon: IconButton(
                         icon: Icon(
                           _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,

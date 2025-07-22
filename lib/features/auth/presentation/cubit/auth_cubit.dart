@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/auth/data/models/login_request_model.dart';
 import 'package:movieapp/features/auth/data/models/register_request_model.dart';
-import 'package:movieapp/features/auth/domain/repositories/auth_repository.dart';
+import 'package:movieapp/features/auth/data/repositories/auth_repository.dart';
 
 import 'auth_state.dart';
 
@@ -28,7 +28,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
-      (user) => emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true)),
+      (user) => emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true, errorMessage: null)),
     );
   }
 
@@ -39,7 +39,7 @@ class AuthCubit extends Cubit<AuthState> {
 
     result.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
-      (user) => emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true)),
+      (user) => emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true, errorMessage: null)),
     );
   }
 
@@ -52,5 +52,10 @@ class AuthCubit extends Cubit<AuthState> {
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
       (_) => emit(const AuthState()),
     );
+  }
+
+  // Hata mesajını temizle
+  void clearError() {
+    emit(state.withoutError());
   }
 }

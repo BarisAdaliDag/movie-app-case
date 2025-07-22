@@ -1,24 +1,18 @@
-class ServerException implements Exception {
+class ApiException implements Exception {
   final String message;
-  const ServerException(this.message);
+  final String? code;
+
+  ApiException({required this.message, this.code});
+
+  @override
+  String toString() => message;
 }
 
 class NetworkException implements Exception {
   final String message;
-  const NetworkException(this.message);
-}
 
-class ValidationException implements Exception {
-  final String message;
-  const ValidationException(this.message);
-}
+  NetworkException({required this.message});
 
-class AuthException implements Exception {
-  final String message;
-  const AuthException(this.message);
-}
-
-class CacheException implements Exception {
-  final String message;
-  const CacheException(this.message);
+  @override
+  String toString() => message;
 }

@@ -1,4 +1,4 @@
-import 'package:movieapp/features/auth/data/models/user_model.dart';
+import '../../data/models/user_model.dart';
 
 class AuthState {
   final bool isLoading;
@@ -12,8 +12,13 @@ class AuthState {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       user: user ?? this.user,
-      errorMessage: errorMessage,
+      errorMessage: errorMessage ?? this.errorMessage,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
     );
+  }
+
+  // Hata temizleme için
+  AuthState withoutError() {
+    return AuthState(isLoading: isLoading, user: user, errorMessage: null, isAuthenticated: isAuthenticated);
   }
 }

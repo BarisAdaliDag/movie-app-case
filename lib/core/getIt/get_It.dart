@@ -1,8 +1,8 @@
 import 'package:get_it/get_it.dart';
 import 'package:movieapp/features/auth/data/datasources/auth_datasource.dart';
 import 'package:movieapp/features/auth/data/datasources/auth_remote_data_source.dart';
+import 'package:movieapp/features/auth/data/repositories/auth_repository.dart';
 import 'package:movieapp/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:movieapp/features/auth/domain/repositories/auth_repository.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
 import '../network/network_client.dart';
 

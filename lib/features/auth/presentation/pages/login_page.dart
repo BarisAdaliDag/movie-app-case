@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
 import '../widgets/custom_button.dart';
@@ -16,8 +17,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'safa@nodelabs.com');
+  final _passwordController = TextEditingController(text: '123451');
   bool _obscurePassword = true;
 
   @override
@@ -25,26 +26,6 @@ class _LoginPageState extends State<LoginPage> {
     _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
-  }
-
-  String? _validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Email is required';
-    }
-    if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Enter a valid email';
-    }
-    return null;
-  }
-
-  String? _validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Password is required';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
-    return null;
   }
 
   void _login() {
@@ -59,18 +40,17 @@ class _LoginPageState extends State<LoginPage> {
       backgroundColor: Colors.white,
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
+          // Success - Navigate to Profile
           if (state.isAuthenticated && state.user != null) {
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+            return;
           }
 
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                content: Text(state.errorMessage!),
-                backgroundColor: Colors.red,
-                duration: const Duration(seconds: 3),
-              ),
-            );
+          // Error - Show SnackBar
+          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+            SnackBarHelper.showError(context, state.errorMessage!);
+            // Clear error after showing
+            context.read<AuthCubit>().clearError();
           }
         },
         builder: (context, state) {
@@ -118,7 +98,15 @@ class _LoginPageState extends State<LoginPage> {
                       hint: 'Enter your email',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: _validateEmail,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Email is required';
+                        }
+                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
+                          return 'Enter a valid email';
+                        }
+                        return null;
+                      },
                     ),
 
                     const SizedBox(height: 24),
@@ -129,7 +117,15 @@ class _LoginPageState extends State<LoginPage> {
                       hint: 'Enter your password',
                       controller: _passwordController,
                       obscureText: _obscurePassword,
-                      validator: _validatePassword,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Password is required';
+                        }
+                        if (value.length < 6) {
+                          return 'Password must be at least 6 characters';
+                        }
+                        return null;
+                      },
                       suffixIcon: IconButton(
                         icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
                         onPressed: () {
