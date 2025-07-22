@@ -82,7 +82,21 @@ class ProfilePage extends StatelessWidget {
                             color: Colors.blue.shade100,
                             borderRadius: BorderRadius.circular(50),
                           ),
-                          child: Icon(Icons.person, size: 50, color: Colors.blue.shade600),
+                          child:
+                              state.user!.photoUrl != null && state.user!.photoUrl!.isNotEmpty
+                                  ? ClipRRect(
+                                    borderRadius: BorderRadius.circular(50),
+                                    child: Image.network(
+                                      state.user!.photoUrl!,
+                                      fit: BoxFit.cover,
+                                      width: 100,
+                                      height: 100,
+                                      errorBuilder:
+                                          (context, error, stackTrace) =>
+                                              Icon(Icons.person, size: 50, color: Colors.blue.shade600),
+                                    ),
+                                  )
+                                  : Icon(Icons.person, size: 50, color: Colors.blue.shade600),
                         ),
                         const SizedBox(height: 16),
 
