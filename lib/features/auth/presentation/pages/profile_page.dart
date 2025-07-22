@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movieapp/features/auth/presentation/bloc/auth_cubit.dart';
-import 'package:movieapp/features/auth/presentation/bloc/auth_state.dart';
-
-import '../widgets/custom_button.dart';
-import '../widgets/loading_widget.dart';
-import 'login_page.dart';
+import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:movieapp/features/auth/presentation/pages/login_page.dart';
+import 'package:movieapp/features/auth/presentation/widgets/custom_button.dart';
+import 'package:movieapp/features/auth/presentation/widgets/loading_widget.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

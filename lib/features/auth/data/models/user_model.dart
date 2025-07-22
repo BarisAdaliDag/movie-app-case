@@ -1,28 +1,25 @@
-import 'package:movieapp/features/auth/domain/entities/user.dart';
+class UserModel {
+  final String id;
+  final String email;
+  final String name;
+  final String? token;
 
-class UserModel extends User {
-  const UserModel({required super.id, required super.email, required super.name, super.token});
+  UserModel({required this.id, required this.email, required this.name, this.token});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      id: json['id']?.toString() ?? '',
-      email: json['email'] ?? '',
-      name: json['name'] ?? '',
-      token: json['token'],
+      id: json['id'] as String,
+      email: json['email'] as String,
+      name: json['name'] as String,
+      token: json['token'] as String?, // nullable olabilir
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {'id': id, 'email': email, 'name': name, if (token != null) 'token': token};
+    return {'id': id, 'email': email, 'name': name, 'token': token};
   }
 
-  @override
-  UserModel copyWith({String? id, String? email, String? name, String? token}) {
-    return UserModel(
-      id: id ?? this.id,
-      email: email ?? this.email,
-      name: name ?? this.name,
-      token: token ?? this.token,
-    );
+  UserModel copyWith({String? token}) {
+    return UserModel(id: id, email: email, name: name, token: token ?? this.token);
   }
 }
