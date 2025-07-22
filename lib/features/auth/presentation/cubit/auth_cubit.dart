@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/auth/data/models/login_request_model.dart';
 import 'package:movieapp/features/auth/data/models/register_request_model.dart';
@@ -51,6 +53,17 @@ class AuthCubit extends Cubit<AuthState> {
     result.fold(
       (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
       (_) => emit(const AuthState()),
+    );
+  }
+
+  Future<void> uploadProfilePhoto(File imageFile) async {
+    emit(state.copyWith(isLoading: true, errorMessage: null));
+
+    final result = await authRepository.uploadProfilePhoto(imageFile);
+
+    result.fold(
+      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
+      (updatedUser) => emit(state.copyWith(isLoading: false, user: updatedUser, isAuthenticated: true)),
     );
   }
 

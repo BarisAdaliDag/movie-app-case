@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:movieapp/features/auth/presentation/pages/photo_upload_page.dart';
 import '../widgets/loading_widget.dart';
 import 'login_page.dart';
 import 'profile_page.dart';
@@ -17,7 +18,9 @@ class SplashPage extends StatelessWidget {
         listener: (context, state) {
           if (!state.isLoading) {
             if (state.isAuthenticated && state.user != null) {
-              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+              Navigator.of(
+                context,
+              ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
             } else {
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
             }

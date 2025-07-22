@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
+import 'package:movieapp/features/auth/presentation/pages/photo_upload_page.dart';
 import '../widgets/custom_button.dart';
 import '../widgets/custom_text_field.dart';
 import 'profile_page.dart';
@@ -50,8 +51,10 @@ class _RegisterPageState extends State<RegisterPage> {
         listener: (context, state) {
           // Success - Navigate to Profile
           if (state.isAuthenticated && state.user != null) {
-            SnackBarHelper.showSuccess(context, 'Kayıt başarılı! Hoş geldiniz!');
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+            // SnackBarHelper.showSuccess(context, 'Kayıt başarılı! Hoş geldiniz!');
+            Navigator.of(
+              context,
+            ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
             return;
           }
 

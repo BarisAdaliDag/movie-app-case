@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:movieapp/core/error/error_handler.dart';
 import 'package:movieapp/core/error/failures.dart';
+import 'package:movieapp/core/services/photo_upload_service.dart';
 import 'package:movieapp/features/auth/data/datasources/auth_datasource.dart';
 import 'package:movieapp/features/auth/data/models/login_request_model.dart';
 import 'package:movieapp/features/auth/data/models/register_request_model.dart';
@@ -48,6 +52,24 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       await authDatasource.logout();
       return Right(null);
+    } catch (error) {
+      return Left(ErrorHandler.handleError(error));
+    }
+  }
+
+  @override
+  Future<Either<Failure, UserModel>> uploadProfilePhoto(File imageFile) async {
+    try {
+      final response = await PhotoUploadService.uploadPhoto(imageFile);
+
+      if (response['success'] == true) {
+        final responseData = jsonDecode(response['data']);
+        final userData = responseData['data'];
+        final updatedUser = UserModel.fromJson(userData);
+        return Right(updatedUser);
+      } else {
+        return Left(AuthFailure.serverError());
+      }
     } catch (error) {
       return Left(ErrorHandler.handleError(error));
     }
