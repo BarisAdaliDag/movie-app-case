@@ -19,33 +19,28 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> login(LoginRequestModel loginRequest) async {
-    final response = await networkClient.post(
-      endpoint: ApiConstants.login,
-      body: loginRequest.toJson(),
-    );
+    final response = await networkClient.post(endpoint: ApiConstants.login, body: loginRequest.toJson());
 
-    final userModel = UserModel.fromJson(response['user']);
-    final token = response['token'];
-    
+    print(response);
+    final userModel = UserModel.fromJson(response['data']);
+    final token = response['data']['token'];
+
     // Store the token securely
     await SecureStorage.storeToken(token);
-    
+
     return userModel.copyWith(token: token);
   }
 
   @override
   Future<UserModel> register(RegisterRequestModel registerRequest) async {
-    final response = await networkClient.post(
-      endpoint: ApiConstants.register,
-      body: registerRequest.toJson(),
-    );
+    final response = await networkClient.post(endpoint: ApiConstants.register, body: registerRequest.toJson());
 
-    final userModel = UserModel.fromJson(response['user']);
-    final token = response['token'];
-    
+    final userModel = UserModel.fromJson(response['data']);
+    final token = response['data']['token'];
+
     // Store the token securely
     await SecureStorage.storeToken(token);
-    
+
     return userModel.copyWith(token: token);
   }
 
@@ -58,12 +53,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
     final response = await networkClient.get(
       endpoint: ApiConstants.profile,
-      headers: {
-        ApiConstants.authorization: '${ApiConstants.bearer} $token',
-      },
+      headers: {ApiConstants.authorization: '${ApiConstants.bearer} $token'},
     );
 
-    return UserModel.fromJson(response['user']);
+    return UserModel.fromJson(response['data']);
   }
 
   @override

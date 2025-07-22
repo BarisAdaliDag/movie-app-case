@@ -14,12 +14,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final GetProfile getProfile;
   final Logout logout;
 
-  AuthBloc({
-    required this.login,
-    required this.register,
-    required this.getProfile,
-    required this.logout,
-  }) : super(AuthInitial()) {
+  AuthBloc({required this.login, required this.register, required this.getProfile, required this.logout})
+    : super(AuthInitial()) {
     on<CheckAuthStatusEvent>(_onCheckAuthStatus);
     on<LoginEvent>(_onLogin);
     on<RegisterEvent>(_onRegister);
@@ -27,13 +23,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<LogoutEvent>(_onLogout);
   }
 
-  Future<void> _onCheckAuthStatus(
-    CheckAuthStatusEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _onCheckAuthStatus(CheckAuthStatusEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
-      
+
       final token = await SecureStorage.getToken();
       if (token == null) {
         emit(AuthUnauthenticated());
@@ -57,17 +50,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onLogin(
-    LoginEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
 
       final result = await login(event.email, event.password);
       result.fold(
         (failure) {
-          AppLogger.error('Login failed: ${failure.message}');
+          AppLogger.error('Login failed1: ${failure.message}');
           emit(AuthError(message: failure.message));
         },
         (user) {
@@ -81,10 +71,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onRegister(
-    RegisterEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _onRegister(RegisterEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
 
@@ -105,10 +92,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onGetProfile(
-    GetProfileEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _onGetProfile(GetProfileEvent event, Emitter<AuthState> emit) async {
     try {
       final result = await getProfile();
       result.fold(
@@ -127,10 +111,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     }
   }
 
-  Future<void> _onLogout(
-    LogoutEvent event,
-    Emitter<AuthState> emit,
-  ) async {
+  Future<void> _onLogout(LogoutEvent event, Emitter<AuthState> emit) async {
     try {
       emit(AuthLoading());
 
