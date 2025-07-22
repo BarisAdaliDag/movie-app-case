@@ -1,33 +1,24 @@
+import 'package:movieapp/features/auth/data/models/login_request_model.dart';
+import 'package:movieapp/features/auth/data/models/register_request_model.dart';
+import 'package:movieapp/features/auth/data/models/user_model.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/network_client.dart';
 import '../../../../core/utils/secure_storage.dart';
-import '../models/user_model.dart';
-import '../models/login_request_model.dart';
-import '../models/register_request_model.dart';
+import 'auth_datasource.dart';
 
-abstract class AuthRemoteDataSource {
-  Future<UserModel> login(LoginRequestModel loginRequest);
-  Future<UserModel> register(RegisterRequestModel registerRequest);
-  Future<UserModel> getProfile();
-  Future<void> logout();
-}
-
-class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+class AuthRemoteDatasource implements AuthDatasource {
   final NetworkClient networkClient;
 
-  AuthRemoteDataSourceImpl({required this.networkClient});
+  AuthRemoteDatasource({required this.networkClient});
 
   @override
   Future<UserModel> login(LoginRequestModel loginRequest) async {
     final response = await networkClient.post(endpoint: ApiConstants.login, body: loginRequest.toJson());
 
-    print(response);
     final userModel = UserModel.fromJson(response['data']);
     final token = response['data']['token'];
 
-    // Store the token securely
     await SecureStorage.storeToken(token);
-
     return userModel.copyWith(token: token);
   }
 
@@ -38,9 +29,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     final userModel = UserModel.fromJson(response['data']);
     final token = response['data']['token'];
 
-    // Store the token securely
     await SecureStorage.storeToken(token);
-
     return userModel.copyWith(token: token);
   }
 

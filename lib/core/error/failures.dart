@@ -1,26 +1,17 @@
-import 'package:dartz/dartz.dart';
-
 abstract class Failure {
-  final String message;
-  const Failure(this.message);
-}
+  final String errorMessage;
 
-class ServerFailure extends Failure {
-  const ServerFailure(super.message);
-}
-
-class NetworkFailure extends Failure {
-  const NetworkFailure(super.message);
-}
-
-class ValidationFailure extends Failure {
-  const ValidationFailure(super.message);
+  Failure({required this.errorMessage});
 }
 
 class AuthFailure extends Failure {
-  const AuthFailure(super.message);
+  AuthFailure({required super.errorMessage});
 }
 
-class CacheFailure extends Failure {
-  const CacheFailure(super.message);
+class NetworkFailure extends Failure {
+  NetworkFailure({required super.errorMessage});
+}
+
+class ServerFailure extends Failure {
+  ServerFailure({required super.errorMessage});
 }

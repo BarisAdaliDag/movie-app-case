@@ -1,37 +1,20 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
 import '../constants/api_constants.dart';
-import '../error/exceptions.dart';
 
 class NetworkClient {
-  final http.Client client;
+  late final Dio _dio;
 
-  NetworkClient({required this.client});
+  NetworkClient() {
+    _dio = Dio(
+      BaseOptions(
+        baseUrl: ApiConstants.baseUrl,
+        connectTimeout: const Duration(seconds: 30),
+        receiveTimeout: const Duration(seconds: 30),
+        headers: {ApiConstants.contentType: ApiConstants.applicationJson},
+      ),
+    );
 
-  Future<Map<String, dynamic>> get({
-    required String endpoint,
-    Map<String, String>? headers,
-  }) async {
-    try {
-      final response = await client
-          .get(
-            Uri.parse('${ApiConstants.baseUrl}$endpoint'),
-            headers: {
-              ApiConstants.contentType: ApiConstants.applicationJson,
-              ...?headers,
-            },
-          )
-          .timeout(const Duration(milliseconds: ApiConstants.connectionTimeout));
-
-      return _handleResponse(response);
-    } on SocketException {
-      throw const NetworkException('No internet connection');
-    } on HttpException {
-      throw const NetworkException('HTTP error occurred');
-    } catch (e) {
-      throw NetworkException('Network error: ${e.toString()}');
-    }
+    _dio.interceptors.add(LogInterceptor(requestBody: true, responseBody: true, logPrint: (object) => print(object)));
   }
 
   Future<Map<String, dynamic>> post({
@@ -40,42 +23,31 @@ class NetworkClient {
     Map<String, String>? headers,
   }) async {
     try {
-      final response = await client
-          .post(
-            Uri.parse('${ApiConstants.baseUrl}$endpoint'),
-            headers: {
-              ApiConstants.contentType: ApiConstants.applicationJson,
-              ...?headers,
-            },
-            body: json.encode(body),
-          )
-          .timeout(const Duration(milliseconds: ApiConstants.connectionTimeout));
-
-      return _handleResponse(response);
-    } on SocketException {
-      throw const NetworkException('No internet connection');
-    } on HttpException {
-      throw const NetworkException('HTTP error occurred');
-    } catch (e) {
-      throw NetworkException('Network error: ${e.toString()}');
+      final response = await _dio.post(endpoint, data: body, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
     }
   }
 
-  Map<String, dynamic> _handleResponse(http.Response response) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
-      try {
-        return json.decode(response.body);
-      } catch (e) {
-        throw const ServerException('Invalid response format');
-      }
-    } else if (response.statusCode == 401) {
-      throw const AuthException('Unauthorized');
-    } else if (response.statusCode == 400) {
-      throw const ValidationException('Invalid request data');
-    } else if (response.statusCode >= 500) {
-      throw const ServerException('Server error');
-    } else {
-      throw ServerException('Request failed with status: ${response.statusCode}');
+  Future<Map<String, dynamic>> get({required String endpoint, Map<String, String>? headers}) async {
+    try {
+      final response = await _dio.get(endpoint, options: Options(headers: headers));
+      return response.data;
+    } on DioException catch (e) {
+      throw _handleDioException(e);
+    }
+  }
+
+  Exception _handleDioException(DioException e) {
+    switch (e.type) {
+      case DioExceptionType.connectionTimeout:
+      case DioExceptionType.receiveTimeout:
+        return Exception('Connection timeout');
+      case DioExceptionType.badResponse:
+        return Exception(e.response?.data['message'] ?? 'Server error');
+      default:
+        return Exception('Network error occurred');
     }
   }
 }

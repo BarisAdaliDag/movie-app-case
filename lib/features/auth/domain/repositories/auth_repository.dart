@@ -1,10 +1,13 @@
-import 'package:dartz/dartz.dart';
-import '../../../../core/error/failures.dart';
-import '../entities/user.dart';
+import 'package:movieapp/core/error/failures.dart';
+import 'package:movieapp/features/auth/data/models/login_request_model.dart';
+import 'package:movieapp/features/auth/data/models/register_request_model.dart';
+import 'package:movieapp/features/auth/data/models/user_model.dart';
+
+import '../../../../core/error/either.dart';
 
 abstract class AuthRepository {
-  Future<Either<Failure, User>> login(String email, String password);
-  Future<Either<Failure, User>> register(String email, String name, String password);
-  Future<Either<Failure, User>> getProfile();
-  Future<Either<Failure, Unit>> logout();
+  Future<Either<Failure, UserModel>> login(LoginRequestModel loginRequest);
+  Future<Either<Failure, UserModel>> register(RegisterRequestModel registerRequest);
+  Future<Either<Failure, UserModel>> getProfile();
+  Future<Either<Failure, void>> logout();
 }

@@ -1,86 +1,60 @@
-import 'package:dartz/dartz.dart';
-import '../../../../core/error/exceptions.dart';
-import '../../../../core/error/failures.dart';
-import '../../domain/entities/user.dart';
-import '../../domain/repositories/auth_repository.dart';
-import '../datasources/auth_remote_data_source.dart';
-import '../models/login_request_model.dart';
-import '../models/register_request_model.dart';
+import 'package:dio/dio.dart';
+import 'package:movieapp/core/error/failures.dart';
+import 'package:movieapp/features/auth/data/datasources/auth_datasource.dart';
+import 'package:movieapp/features/auth/data/models/login_request_model.dart';
+import 'package:movieapp/features/auth/data/models/register_request_model.dart';
+import 'package:movieapp/features/auth/data/models/user_model.dart';
+import 'package:movieapp/features/auth/domain/repositories/auth_repository.dart';
+import '../../../../core/error/either.dart';
 
 class AuthRepositoryImpl implements AuthRepository {
-  final AuthRemoteDataSource remoteDataSource;
+  final AuthDatasource authDatasource;
 
-  AuthRepositoryImpl({required this.remoteDataSource});
+  AuthRepositoryImpl({required this.authDatasource});
 
   @override
-  Future<Either<Failure, User>> login(String email, String password) async {
+  Future<Either<Failure, UserModel>> login(LoginRequestModel loginRequest) async {
     try {
-      final loginRequest = LoginRequestModel(email: email, password: password);
-      final user = await remoteDataSource.login(loginRequest);
+      final user = await authDatasource.login(loginRequest);
       return Right(user);
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(e.message));
-    } on ValidationException catch (e) {
-      return Left(ValidationFailure(e.message));
+    } on DioException catch (e) {
+      return Left(AuthFailure(errorMessage: e.response?.data['message'] ?? 'Login failed'));
     } catch (e) {
-      return Left(ServerFailure('Unexpected error: ${e.toString()}'));
+      return Left(AuthFailure(errorMessage: 'Unexpected error occurred'));
     }
   }
 
   @override
-  Future<Either<Failure, User>> register(String email, String name, String password) async {
+  Future<Either<Failure, UserModel>> register(RegisterRequestModel registerRequest) async {
     try {
-      final registerRequest = RegisterRequestModel(
-        email: email,
-        name: name,
-        password: password,
-      );
-      final user = await remoteDataSource.register(registerRequest);
+      final user = await authDatasource.register(registerRequest);
       return Right(user);
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(e.message));
-    } on ValidationException catch (e) {
-      return Left(ValidationFailure(e.message));
+    } on DioException catch (e) {
+      return Left(AuthFailure(errorMessage: e.response?.data['message'] ?? 'Registration failed'));
     } catch (e) {
-      return Left(ServerFailure('Unexpected error: ${e.toString()}'));
+      return Left(AuthFailure(errorMessage: 'Unexpected error occurred'));
     }
   }
 
   @override
-  Future<Either<Failure, User>> getProfile() async {
+  Future<Either<Failure, UserModel>> getProfile() async {
     try {
-      final user = await remoteDataSource.getProfile();
+      final user = await authDatasource.getProfile();
       return Right(user);
-    } on NetworkException catch (e) {
-      return Left(NetworkFailure(e.message));
-    } on ServerException catch (e) {
-      return Left(ServerFailure(e.message));
-    } on AuthException catch (e) {
-      return Left(AuthFailure(e.message));
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+    } on DioException catch (e) {
+      return Left(AuthFailure(errorMessage: e.response?.data['message'] ?? 'Failed to get profile'));
     } catch (e) {
-      return Left(ServerFailure('Unexpected error: ${e.toString()}'));
+      return Left(AuthFailure(errorMessage: 'Unexpected error occurred'));
     }
   }
 
   @override
-  Future<Either<Failure, Unit>> logout() async {
+  Future<Either<Failure, void>> logout() async {
     try {
-      await remoteDataSource.logout();
-      return const Right(unit);
-    } on CacheException catch (e) {
-      return Left(CacheFailure(e.message));
+      await authDatasource.logout();
+      return Right(null);
     } catch (e) {
-      return Left(ServerFailure('Unexpected error: ${e.toString()}'));
+      return Left(AuthFailure(errorMessage: 'Logout failed'));
     }
   }
 }

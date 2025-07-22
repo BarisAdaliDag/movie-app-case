@@ -1,16 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/constants/app_constants.dart';
-import 'core/injection_container.dart' as di;
-import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'package:movieapp/core/getIt/get_it.dart';
+import 'package:movieapp/features/auth/presentation/bloc/auth_cubit.dart';
 import 'features/auth/presentation/pages/splash_page.dart';
 
-void main() async {
+void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  
-  // Initialize dependency injection
-  await di.init();
-  
+  setup(); // GetIt setup
   runApp(const MovieApp());
 }
 
@@ -20,46 +16,12 @@ class MovieApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => di.sl<AuthBloc>(),
+      create: (context) => getIt<AuthCubit>()..checkAuthStatus(),
       child: MaterialApp(
-        title: AppConstants.appName,
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          primaryColor: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-          fontFamily: 'System',
-          appBarTheme: const AppBarTheme(
-            elevation: 0,
-            centerTitle: true,
-            backgroundColor: Colors.blue,
-            foregroundColor: Colors.white,
-          ),
-          elevatedButtonTheme: ElevatedButtonThemeData(
-            style: ElevatedButton.styleFrom(
-              elevation: 2,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8),
-              ),
-            ),
-          ),
-          textButtonTheme: TextButtonThemeData(
-            style: TextButton.styleFrom(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            ),
-          ),
-          inputDecorationTheme: InputDecorationTheme(
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 12,
-            ),
-          ),
-        ),
+        title: 'Movie App',
+        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
         home: const SplashPage(),
+        debugShowCheckedModeBanner: false,
       ),
     );
   }

@@ -4,12 +4,8 @@ import '../error/exceptions.dart';
 
 class SecureStorage {
   static const FlutterSecureStorage _storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
-    iOptions: IOSOptions(
-      accessibility: KeychainAccessibility.first_unlock_this_device,
-    ),
+    aOptions: AndroidOptions(encryptedSharedPreferences: true),
+    iOptions: IOSOptions(accessibility: KeychainAccessibility.first_unlock_this_device),
   );
 
   static Future<void> storeToken(String token) async {
@@ -68,3 +64,21 @@ class SecureStorage {
     }
   }
 }
+//import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+// class SecureStorage {
+//   static const _storage = FlutterSecureStorage();
+//   static const _tokenKey = 'auth_token';
+
+//   static Future<void> storeToken(String token) async {
+//     await _storage.write(key: _tokenKey, value: token);
+//   }
+
+//   static Future<String?> getToken() async {
+//     return await _storage.read(key: _tokenKey);
+//   }
+
+//   static Future<void> clearAll() async {
+//     await _storage.deleteAll();
+//   }
+// }

@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   final String text;
-  final VoidCallback? onPressed;
+  final VoidCallback onPressed;
   final bool isLoading;
-  final bool isFullWidth;
   final Color? backgroundColor;
   final Color? textColor;
 
   const CustomButton({
     super.key,
     required this.text,
-    this.onPressed,
+    required this.onPressed,
     this.isLoading = false,
-    this.isFullWidth = true,
     this.backgroundColor,
     this.textColor,
   });
@@ -21,34 +19,20 @@ class CustomButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: isFullWidth ? double.infinity : null,
-      height: 50,
+      width: double.infinity,
+      height: 56,
       child: ElevatedButton(
         onPressed: isLoading ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? Theme.of(context).primaryColor,
+          backgroundColor: backgroundColor ?? Colors.blue,
           foregroundColor: textColor ?? Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
           elevation: 2,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        child: isLoading
-            ? const SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                ),
-              )
-            : Text(
-                text,
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+        child:
+            isLoading
+                ? const CircularProgressIndicator(color: Colors.white, strokeWidth: 2)
+                : Text(text, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600)),
       ),
     );
   }

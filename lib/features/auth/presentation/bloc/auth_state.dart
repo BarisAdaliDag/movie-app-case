@@ -1,21 +1,19 @@
-import '../../domain/entities/user.dart';
+import 'package:movieapp/features/auth/data/models/user_model.dart';
 
-abstract class AuthState {}
+class AuthState {
+  final bool isLoading;
+  final UserModel? user;
+  final String? errorMessage;
+  final bool isAuthenticated;
 
-class AuthInitial extends AuthState {}
+  const AuthState({this.isLoading = false, this.user, this.errorMessage, this.isAuthenticated = false});
 
-class AuthLoading extends AuthState {}
-
-class AuthAuthenticated extends AuthState {
-  final User user;
-
-  AuthAuthenticated({required this.user});
-}
-
-class AuthUnauthenticated extends AuthState {}
-
-class AuthError extends AuthState {
-  final String message;
-
-  AuthError({required this.message});
+  AuthState copyWith({bool? isLoading, UserModel? user, String? errorMessage, bool? isAuthenticated}) {
+    return AuthState(
+      isLoading: isLoading ?? this.isLoading,
+      user: user ?? this.user,
+      errorMessage: errorMessage,
+      isAuthenticated: isAuthenticated ?? this.isAuthenticated,
+    );
+  }
 }
