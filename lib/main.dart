@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
+import 'package:movieapp/core/theme/app_theme.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_cubit.dart';
@@ -25,7 +26,7 @@ class MovieApp extends StatelessWidget {
       ],
       child: MaterialApp(
         title: 'Movie App',
-        theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),
+        theme: AppTheme.darkTheme,
         home: const SplashPage(),
         debugShowCheckedModeBanner: false,
       ),

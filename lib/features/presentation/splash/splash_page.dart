@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_assets.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
@@ -13,10 +14,10 @@ class SplashPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue,
       body: BlocListener<AuthCubit, AuthState>(
-        listener: (context, state) {
+        listener: (context, state) async {
           if (!state.isLoading) {
+            await Future.delayed(const Duration(seconds: 2));
             if (state.isAuthenticated && state.user != null) {
               Navigator.of(
                 context,
@@ -28,16 +29,11 @@ class SplashPage extends StatelessWidget {
         },
         child: BlocBuilder<AuthCubit, AuthState>(
           builder: (context, state) {
-            return const Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(Icons.movie, size: 120, color: Colors.white),
-                  SizedBox(height: 24),
-                  Text('Movie App', style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
-                  SizedBox(height: 48),
-                  LoadingWidget(message: 'Initializing...'),
-                ],
+            return Container(
+              width: double.infinity,
+              height: double.infinity,
+              decoration: const BoxDecoration(
+                image: DecorationImage(image: AssetImage(AppAssets.splashImage), fit: BoxFit.cover),
               ),
             );
           },
