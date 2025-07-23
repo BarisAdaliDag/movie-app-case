@@ -5,7 +5,6 @@ import 'package:movieapp/features/presentation/register/cubit/register_state.dar
 class RegisterCubit extends Cubit<RegisterFormState> {
   RegisterCubit() : super(const RegisterFormState());
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController nameController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
@@ -65,11 +64,18 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
   // Form validation
   bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+    return validateName(nameController.text) == null &&
+        validateEmail(emailController.text) == null &&
+        validatePassword(passwordController.text) == null &&
+        validateConfirmPassword(confirmPasswordController.text) == null;
   }
 
   void resetForm() {
-    formKey.currentState?.reset();
+    emailController.clear();
+    nameController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    emit(const RegisterFormState());
   }
 
   // Password strength
@@ -140,7 +146,6 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     nameController.clear();
     passwordController.clear();
     confirmPasswordController.clear();
-    resetForm();
     emit(const RegisterFormState());
   }
 }

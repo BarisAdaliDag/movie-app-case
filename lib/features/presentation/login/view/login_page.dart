@@ -55,7 +55,6 @@ class _LoginPageView extends StatelessWidget {
                 final formCubit = context.read<LoginCubit>();
 
                 return Form(
-                  key: formCubit.formKey,
                   onChanged: () => formCubit.updateFormValidity(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

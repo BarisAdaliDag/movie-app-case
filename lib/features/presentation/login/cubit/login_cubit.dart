@@ -5,7 +5,6 @@ import 'package:movieapp/features/presentation/login/cubit/login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginState());
 
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController(text: 'ada2@gmail.com');
   final TextEditingController passwordController = TextEditingController(text: '123456');
 
@@ -39,11 +38,13 @@ class LoginCubit extends Cubit<LoginState> {
 
   // Form validation
   bool validateForm() {
-    return formKey.currentState?.validate() ?? false;
+    return validateEmail(emailController.text) == null && validatePassword(passwordController.text) == null;
   }
 
   void resetForm() {
-    formKey.currentState?.reset();
+    emailController.clear();
+    passwordController.clear();
+    emit(const LoginState());
   }
 
   // Actions
@@ -73,8 +74,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void setTestCredentials() {
-    emailController.text = 'safa@nodelabs.com';
-    passwordController.text = '123451';
+    emailController.text = 'ada2@gmail.com';
+    passwordController.text = '123456';
     updateFormValidity();
   }
 }
