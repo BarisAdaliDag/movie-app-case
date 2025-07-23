@@ -23,6 +23,10 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
+  Future<void> getProfile() async {
+    final result = await authRepository.getProfile();
+  }
+
   Future<void> login(String email, String password) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
@@ -56,22 +60,21 @@ class AuthCubit extends Cubit<AuthState> {
     );
   }
 
-  Future<void> uploadProfilePhoto(File imageFile) async {
+  Future<bool> uploadProfilePhoto(File imageFile) async {
     emit(state.copyWith(isLoading: true, errorMessage: null));
 
     final result = await authRepository.uploadProfilePhoto(imageFile);
 
-    result.fold(
+    return result.fold(
       (failure) {
         emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage));
-        // return false;
+        return false;
       },
       (updatedUser) {
         emit(state.copyWith(isLoading: false, user: updatedUser, isAuthenticated: true));
-        //  return true;
+        return true;
       },
     );
-    //return false;
   }
 
   // Hata mesajını temizle

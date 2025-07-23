@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:movieapp/core/utils/snackbar_helper.dart';
+import 'package:movieapp/features/presentation/profile/profile_page.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'photo_upload_state.dart';
@@ -45,10 +48,32 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
     return state.selectedImage;
   }
 
-  Future<void> uploadPhoto() async {
+  Future<void> uploadPhoto(BuildContext context) async {
     if (state.selectedImage != null) {
       final result = await authCubit.uploadProfilePhoto(state.selectedImage!);
+
+      if (context.mounted) {
+        if (result == true && authCubit.state.user?.photoUrl != null) {
+          SnackBarHelper.showSuccess(context, 'Profil fotoğrafı başarıyla yüklendi!');
+          authCubit.getProfile(); // Refresh user profile
+          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+        } else {
+          print(authCubit.state.errorMessage);
+
+          // Hata mesajını kontrol et
+          String errorMessage = 'Something went wrong';
+          if (authCubit.state.errorMessage != null && authCubit.state.errorMessage!.contains('413')) {
+            errorMessage = 'The image size is too large. Please select a smaller image.';
+          }
+
+          SnackBarHelper.showError(context, errorMessage);
+        }
+      }
     }
+  }
+
+  void skipPhotoUpload(BuildContext context) {
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
   }
 
   void setCanSkip(bool canSkip) {

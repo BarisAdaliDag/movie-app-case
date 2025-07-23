@@ -36,27 +36,6 @@ class _PhotoUploadPageView extends StatelessWidget {
 
   const _PhotoUploadPageView({required this.user});
 
-  Future<void> _uploadPhoto(BuildContext context) async {
-    final formCubit = context.read<PhotoUploadCubit>();
-    final authCubit = context.read<AuthCubit>();
-    final selectedImage = formCubit.getSelectedImage();
-
-    if (selectedImage != null) {
-      final success = await authCubit.uploadProfilePhoto(selectedImage);
-
-      if (context.mounted) {
-        if (authCubit.state.user?.photoUrl != null) {
-          SnackBarHelper.showSuccess(context, 'Profil fotoğrafı başarıyla yüklendi!');
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
-        }
-      }
-    }
-  }
-
-  void _skipPhotoUpload(BuildContext context) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -170,7 +149,7 @@ class _PhotoUploadPageView extends StatelessWidget {
                           if (formState.selectedImage != null) ...[
                             CustomButton(
                               text: 'Fotoğrafı Yükle',
-                              onPressed: () => _uploadPhoto(context),
+                              onPressed: () => context.read<PhotoUploadCubit>().uploadPhoto(context),
                               isLoading: authState.isLoading,
                               backgroundColor: Colors.green,
                             ),
@@ -180,7 +159,10 @@ class _PhotoUploadPageView extends StatelessWidget {
                           // Skip Button
                           CustomButton(
                             text: formState.selectedImage != null ? 'Şimdilik Atla' : 'Devam Et',
-                            onPressed: authState.isLoading ? null : () => _skipPhotoUpload(context),
+                            onPressed:
+                                authState.isLoading
+                                    ? null
+                                    : () => context.read<PhotoUploadCubit>().skipPhotoUpload(context),
                             isLoading: false,
                             backgroundColor: Colors.grey.shade600,
                           ),
