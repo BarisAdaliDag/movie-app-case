@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movieapp/core/getIt/get_It.dart';
+import 'package:movieapp/core/theme/app_colors.dart';
+import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
@@ -13,6 +15,7 @@ import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_s
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class PhotoUploadPage extends StatelessWidget {
   final UserModel user;
@@ -39,7 +42,24 @@ class _PhotoUploadPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: Container(
+          margin: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: AppColors.white10Opacity,
+            borderRadius: BorderRadius.circular(22),
+            border: Border.all(color: AppColors.white20Opacity, width: 1),
+          ),
+          child: IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.arrow_back, color: AppColors.white, size: 20),
+          ),
+        ),
+        title: Text('Profil Detayı', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
+        centerTitle: true,
+      ),
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, authState) {
           if (authState.errorMessage != null) {
@@ -55,116 +75,78 @@ class _PhotoUploadPageView extends StatelessWidget {
             }
           },
           child: SafeArea(
-            child: SingleChildScrollView(
+            child: Padding(
               padding: const EdgeInsets.all(24),
               child: BlocBuilder<PhotoUploadCubit, PhotoUploadState>(
                 builder: (context, formState) {
                   return BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, authState) {
                       return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          const SizedBox(height: 24),
+
+                          // Title
+                          Center(child: Text('Fotoğraflarınızı Yükleyin', style: AppTextStyles.headline3)),
+                          const SizedBox(height: 8),
+
+                          // Subtitle
+                          Center(
+                            child: Text(
+                              'Resources out incentivize \nrelaxation floor loss cc.',
+                              textAlign: TextAlign.center,
+                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white),
+                            ),
+                          ),
+
                           const SizedBox(height: 40),
 
-                          // Header
-                          const Text(
-                            'Profil Fotoğrafı',
-                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
-                          ),
-                          const SizedBox(height: 8),
-                          Text(
-                            'Merhaba ${user.name}! Profil fotoğrafı eklemek ister misin?',
-                            textAlign: TextAlign.center,
-                            style: const TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
-
-                          const SizedBox(height: 48),
-
-                          // Photo Preview
-                          GestureDetector(
-                            onTap:
-                                authState.isLoading
-                                    ? null
-                                    : () => context.read<PhotoUploadCubit>().pickImageFromGallery(),
-                            child: Container(
-                              width: 200,
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey.shade100,
-                                borderRadius: BorderRadius.circular(100),
-                                border: Border.all(color: Colors.grey.shade300, width: 2),
-                              ),
-                              child:
+                          // Photo Upload Area
+                          Center(
+                            child: GestureDetector(
+                              onTap:
                                   authState.isLoading
-                                      ? const Center(child: CircularProgressIndicator())
-                                      : formState.selectedImage != null
-                                      ? ClipRRect(
-                                        borderRadius: BorderRadius.circular(98),
-                                        child: Image.file(formState.selectedImage!, fit: BoxFit.cover),
-                                      )
-                                      : Column(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          Icon(Icons.add_a_photo, size: 48, color: Colors.grey.shade600),
-                                          const SizedBox(height: 8),
-                                          Text(
-                                            'Fotoğraf Ekle',
-                                            style: TextStyle(
-                                              fontSize: 16,
-                                              color: Colors.grey.shade600,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                            ),
-                          ),
-
-                          const SizedBox(height: 32),
-
-                          // Info Text
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(color: Colors.blue.shade200),
-                            ),
-                            child: Row(
-                              children: [
-                                Icon(Icons.info_outline, color: Colors.blue.shade600, size: 20),
-                                const SizedBox(width: 12),
-                                const Expanded(
-                                  child: Text(
-                                    'Profil fotoğrafı eklemek isteğe bağlıdır. Daha sonra da ekleyebilirsin.',
-                                    style: TextStyle(fontSize: 14, color: Colors.black87),
-                                  ),
+                                      ? null
+                                      : () => context.read<PhotoUploadCubit>().pickImageFromGallery(),
+                              child: Container(
+                                width: (40).w,
+                                height: (40).w,
+                                decoration: BoxDecoration(
+                                  color: AppColors.white10Opacity,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: AppColors.white20Opacity, width: 1),
                                 ),
-                              ],
+                                child:
+                                    authState.isLoading
+                                        ? const Center(child: CircularProgressIndicator(color: AppColors.white))
+                                        : formState.selectedImage != null
+                                        ? ClipRRect(
+                                          borderRadius: BorderRadius.circular(19),
+                                          child: Image.file(formState.selectedImage!, fit: BoxFit.cover),
+                                        )
+                                        : const Center(
+                                          child: Icon(Icons.add, size: 48, color: AppColors.textSecondary),
+                                        ),
+                              ),
                             ),
                           ),
 
-                          const SizedBox(height: 48),
+                          const Spacer(),
 
-                          // Upload Button
-                          if (formState.selectedImage != null) ...[
-                            CustomButton(
-                              text: 'Fotoğrafı Yükle',
-                              onPressed: () => context.read<PhotoUploadCubit>().uploadPhoto(context),
-                              isLoading: authState.isLoading,
-                              backgroundColor: Colors.green,
-                            ),
-                            const SizedBox(height: 16),
-                          ],
-
-                          // Skip Button
+                          // Continue Button
                           CustomButton(
-                            text: formState.selectedImage != null ? 'Şimdilik Atla' : 'Devam Et',
+                            text: 'Devam Et',
                             onPressed:
                                 authState.isLoading
                                     ? null
-                                    : () => context.read<PhotoUploadCubit>().skipPhotoUpload(context),
-                            isLoading: false,
-                            backgroundColor: Colors.grey.shade600,
+                                    : () {
+                                      if (formState.selectedImage != null) {
+                                        context.read<PhotoUploadCubit>().uploadPhoto(context);
+                                      } else {
+                                        context.read<PhotoUploadCubit>().skipPhotoUpload(context);
+                                      }
+                                    },
+                            isLoading: authState.isLoading,
                           ),
                         ],
                       );

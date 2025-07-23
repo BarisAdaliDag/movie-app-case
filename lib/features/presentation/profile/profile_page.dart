@@ -5,6 +5,7 @@ import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/login/view/login_page.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
+import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -35,6 +36,26 @@ class ProfilePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.grey.shade50,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        elevation: 0,
+        title: const Text('Profile', style: TextStyle(color: Colors.black87)),
+        actions: [
+          Builder(
+            builder: (context) {
+              final state = context.watch<AuthCubit>().state;
+              if (state.user == null) return const SizedBox.shrink();
+              return IconButton(
+                icon: const Icon(Icons.add_a_photo, color: Colors.blue),
+                tooltip: 'Upload Photo',
+                onPressed: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+                },
+              );
+            },
+          ),
+        ],
+      ),
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (!state.isAuthenticated && !state.isLoading) {
