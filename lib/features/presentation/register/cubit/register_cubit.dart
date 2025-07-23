@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_state.dart';
 
-class RegisterFormCubit extends Cubit<RegisterFormState> {
-  RegisterFormCubit() : super(const RegisterFormState());
+class RegisterCubit extends Cubit<RegisterFormState> {
+  RegisterCubit() : super(const RegisterFormState());
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   final TextEditingController emailController = TextEditingController();

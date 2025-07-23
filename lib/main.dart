@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
+import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
 import 'package:movieapp/features/presentation/splash/splash_page.dart';
 
 void main() {
@@ -15,8 +16,11 @@ class MovieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthCubit>()..checkAuthStatus(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<AuthCubit>()..checkAuthStatus()),
+        BlocProvider(create: (context) => LoginCubit()),
+      ],
       child: MaterialApp(
         title: 'Movie App',
         theme: ThemeData(primarySwatch: Colors.blue, useMaterial3: true),

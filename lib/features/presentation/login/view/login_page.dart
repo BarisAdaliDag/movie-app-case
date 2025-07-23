@@ -3,34 +3,32 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
+import 'package:movieapp/features/presentation/login/cubit/login_state.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../profile/profile_page.dart';
 import '../../register/view/register_page.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends StatelessWidget {
   const LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  Widget build(BuildContext context) {
+    return const _LoginPageView();
+  }
 }
 
-class _LoginPageState extends State<LoginPage> {
-  final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController(text: 'ada2@gmail.com');
-  final _passwordController = TextEditingController(text: '123456');
-  bool _obscurePassword = true;
+class _LoginPageView extends StatelessWidget {
+  const _LoginPageView();
 
-  @override
-  void dispose() {
-    _emailController.dispose();
-    _passwordController.dispose();
-    super.dispose();
-  }
+  void _login(BuildContext context) {
+    final formCubit = context.read<LoginCubit>();
+    final authCubit = context.read<AuthCubit>();
 
-  void _login() {
-    if (_formKey.currentState!.validate()) {
-      context.read<AuthCubit>().login(_emailController.text.trim(), _passwordController.text);
+    if (formCubit.validateForm()) {
+      final formData = formCubit.getFormData();
+      authCubit.login(formData['email']!, formData['password']!);
     }
   }
 
@@ -38,159 +36,169 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          // Success - Navigate to Profile
-          if (state.isAuthenticated && state.user != null) {
+      body: BlocListener<AuthCubit, AuthState>(
+        listener: (context, authState) {
+          if (authState.isAuthenticated && authState.user != null) {
             Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
-            return;
           }
 
-          // Error - Show SnackBar
-          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
-            SnackBarHelper.showError(context, state.errorMessage!);
-            // Clear error after showing
+          if (authState.errorMessage != null) {
+            SnackBarHelper.showError(context, authState.errorMessage!);
             context.read<AuthCubit>().clearError();
           }
         },
-        builder: (context, state) {
-          return SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
-              child: Form(
-                key: _formKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 40),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: BlocBuilder<LoginCubit, LoginState>(
+              builder: (context, formState) {
+                final formCubit = context.read<LoginCubit>();
 
-                    // Header
-                    Center(
-                      child: Column(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.all(16),
-                            decoration: BoxDecoration(
-                              color: Colors.blue.shade50,
-                              borderRadius: BorderRadius.circular(20),
+                return Form(
+                  key: formCubit.formKey,
+                  onChanged: () => formCubit.updateFormValidity(),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 40),
+
+                      // Header
+                      Center(
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.blue.shade50,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: const Icon(Icons.movie, size: 64, color: Colors.blue),
                             ),
-                            child: const Icon(Icons.movie, size: 64, color: Colors.blue),
+                            const SizedBox(height: 24),
+                            const Text(
+                              'Welcome Back!',
+                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
+                            ),
+                            const SizedBox(height: 8),
+                            const Text(
+                              'Sign in to continue to Movie App',
+                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const SizedBox(height: 48),
+
+                      // Email Field
+                      CustomTextField(
+                        label: 'Email Address',
+                        hint: 'Enter your email',
+                        controller: formCubit.emailController,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: formCubit.validateEmail,
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Password Field
+                      CustomTextField(
+                        label: 'Password',
+                        hint: 'Enter your password',
+                        controller: formCubit.passwordController,
+                        obscureText: formState.obscurePassword,
+                        validator: formCubit.validatePassword,
+                        suffixIcon: IconButton(
+                          icon: Icon(
+                            formState.obscurePassword ? Icons.visibility_off : Icons.visibility,
+                            color: Colors.grey,
                           ),
-                          const SizedBox(height: 24),
-                          const Text(
-                            'Welcome Back!',
-                            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
-                          ),
-                          const SizedBox(height: 8),
-                          const Text(
-                            'Sign in to continue to Movie App',
-                            style: TextStyle(fontSize: 16, color: Colors.grey),
-                          ),
+                          onPressed: () => formCubit.togglePasswordVisibility(),
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Remember Me
+                      Row(
+                        children: [
+                          Checkbox(value: formState.rememberMe, onChanged: (_) => formCubit.toggleRememberMe()),
+                          const Text('Remember me', style: TextStyle(color: Colors.grey)),
                         ],
                       ),
-                    ),
 
-                    const SizedBox(height: 48),
+                      const SizedBox(height: 32),
 
-                    // Email Field
-                    CustomTextField(
-                      label: 'Email Address',
-                      hint: 'Enter your email',
-                      controller: _emailController,
-                      keyboardType: TextInputType.emailAddress,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Email is required';
-                        }
-                        if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                          return 'Enter a valid email';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 24),
-
-                    // Password Field
-                    CustomTextField(
-                      label: 'Password',
-                      hint: 'Enter your password',
-                      controller: _passwordController,
-                      obscureText: _obscurePassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Password is required';
-                        }
-                        if (value.length < 6) {
-                          return 'Password must be at least 6 characters';
-                        }
-                        return null;
-                      },
-                      suffixIcon: IconButton(
-                        icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility, color: Colors.grey),
-                        onPressed: () {
-                          setState(() {
-                            _obscurePassword = !_obscurePassword;
-                          });
+                      // Login Button
+                      BlocBuilder<AuthCubit, AuthState>(
+                        builder: (context, authState) {
+                          return CustomButton(
+                            text: 'Sign In',
+                            onPressed: formState.isValid ? () => _login(context) : null,
+                            isLoading: authState.isLoading,
+                          );
                         },
                       ),
-                    ),
 
-                    const SizedBox(height: 32),
+                      const SizedBox(height: 24),
 
-                    // Login Button
-                    CustomButton(text: 'Sign In', onPressed: _login, isLoading: state.isLoading),
-
-                    const SizedBox(height: 24),
-
-                    // Test Account Info
-                    Container(
-                      padding: const EdgeInsets.all(16),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(12),
-                        border: Border.all(color: Colors.grey.shade200),
-                      ),
-                      child: const Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '🧪 Test Account',
-                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.orange),
-                          ),
-                          SizedBox(height: 8),
-                          Text('Email: safa@nodelabs.com', style: TextStyle(fontSize: 13, color: Colors.grey)),
-                          Text('Password: 123451', style: TextStyle(fontSize: 13, color: Colors.grey)),
-                        ],
-                      ),
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // Register Link
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text("Don't have an account? ", style: TextStyle(color: Colors.grey)),
-                          GestureDetector(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
-                            },
-                            child: const Text(
-                              'Sign Up',
-                              style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                      // Test Account Info
+                      Container(
+                        padding: const EdgeInsets.all(16),
+                        decoration: BoxDecoration(
+                          color: Colors.grey.shade50,
+                          borderRadius: BorderRadius.circular(12),
+                          border: Border.all(color: Colors.grey.shade200),
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  '🧪 Test Account',
+                                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.orange),
+                                ),
+                                const Spacer(),
+                                TextButton(
+                                  onPressed: () => formCubit.setTestCredentials(),
+                                  child: const Text('Use Test Data'),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            const Text('Email: safa@nodelabs.com', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                            const Text('Password: 123451', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+
+                      const SizedBox(height: 32),
+
+                      // Register Link
+                      Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text("Don't have an account? ", style: TextStyle(color: Colors.grey)),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
+                              },
+                              child: const Text(
+                                'Sign Up',
+                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
-          );
-        },
+          ),
+        ),
       ),
     );
   }

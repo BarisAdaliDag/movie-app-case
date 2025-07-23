@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_state.dart';
 
-class LoginFormCubit extends Cubit<LoginFormState> {
-  LoginFormCubit() : super(const LoginFormState());
+class LoginCubit extends Cubit<LoginState> {
+  LoginCubit() : super(const LoginState());
 
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  final TextEditingController emailController = TextEditingController(text: 'safa@nodelabs.com');
-  final TextEditingController passwordController = TextEditingController(text: '123451');
+  final TextEditingController emailController = TextEditingController(text: 'ada2@gmail.com');
+  final TextEditingController passwordController = TextEditingController(text: '123456');
 
   @override
   Future<void> close() {
@@ -69,7 +69,7 @@ class LoginFormCubit extends Cubit<LoginFormState> {
     emailController.clear();
     passwordController.clear();
     resetForm();
-    emit(const LoginFormState());
+    emit(const LoginState());
   }
 
   void setTestCredentials() {
