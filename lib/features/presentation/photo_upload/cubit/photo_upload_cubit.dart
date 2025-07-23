@@ -47,7 +47,7 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
 
   Future<void> uploadPhoto() async {
     if (state.selectedImage != null) {
-      await authCubit.uploadProfilePhoto(state.selectedImage!);
+      final result = await authCubit.uploadProfilePhoto(state.selectedImage!);
     }
   }
 

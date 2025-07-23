@@ -62,9 +62,16 @@ class AuthCubit extends Cubit<AuthState> {
     final result = await authRepository.uploadProfilePhoto(imageFile);
 
     result.fold(
-      (failure) => emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage)),
-      (updatedUser) => emit(state.copyWith(isLoading: false, user: updatedUser, isAuthenticated: true)),
+      (failure) {
+        emit(state.copyWith(isLoading: false, errorMessage: failure.errorMessage));
+        // return false;
+      },
+      (updatedUser) {
+        emit(state.copyWith(isLoading: false, user: updatedUser, isAuthenticated: true));
+        //  return true;
+      },
     );
+    //return false;
   }
 
   // Hata mesajını temizle
