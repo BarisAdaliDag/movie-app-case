@@ -6,6 +6,7 @@ enum SvgEnum {
   google('google'),
   apple('apple'),
   facebook('facebook'),
+  addUser('addUser'),
 
   plus('plus');
 

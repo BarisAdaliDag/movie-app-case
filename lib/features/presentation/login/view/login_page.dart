@@ -23,18 +23,25 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const _LoginPageView();
+    return BlocProvider(create: (context) => LoginCubit(), child: _LoginPageView());
   }
 }
 
-class _LoginPageView extends StatelessWidget {
+class _LoginPageView extends StatefulWidget {
   const _LoginPageView();
+
+  @override
+  State<_LoginPageView> createState() => _LoginPageViewState();
+}
+
+class _LoginPageViewState extends State<_LoginPageView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _login(BuildContext context) {
     final formCubit = context.read<LoginCubit>();
     final authCubit = context.read<AuthCubit>();
 
-    if (formCubit.validateForm()) {
+    if (_formKey.currentState!.validate()) {
       final formData = formCubit.getFormData();
       authCubit.login(formData['email']!, formData['password']!);
     }
@@ -63,6 +70,7 @@ class _LoginPageView extends StatelessWidget {
                 final formCubit = context.read<LoginCubit>();
 
                 return Form(
+                  key: _formKey,
                   onChanged: () => formCubit.updateFormValidity(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -72,7 +80,7 @@ class _LoginPageView extends StatelessWidget {
                         child: Column(
                           children: [
                             const SizedBox(height: 24),
-                            Center(child: const Text('Merhabalar', style: AppTextStyles.bodyLarge)),
+                            Center(child: const Text('Merhabalar', style: AppTextStyles.headline3)),
                             const SizedBox(height: 8),
                             Center(
                               child: Text(
@@ -144,7 +152,7 @@ class _LoginPageView extends StatelessWidget {
                         builder: (context, authState) {
                           return CustomButton(
                             text: 'Giriş Yap',
-                            onPressed: formState.isValid ? () => _login(context) : null,
+                            onPressed: () => _login(context),
                             isLoading: authState.isLoading,
                           );
                         },

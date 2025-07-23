@@ -1,33 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movieapp/core/getIt/get_It.dart';
+import 'package:movieapp/core/enum/svg_enum.dart';
+import 'package:movieapp/core/extension/padding_extension.dart';
+import 'package:movieapp/core/theme/app_colors.dart';
+import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
+import 'package:movieapp/core/widgets/svg_widget.dart';
+import 'package:movieapp/features/data/cubit/auth_cubit.dart';
+import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_cubit.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_state.dart';
-import '../../../data/cubit/auth_cubit.dart';
-import '../../../data/cubit/auth_state.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
-import '../../profile/profile_page.dart';
+import 'package:gap/gap.dart';
 
 class RegisterPage extends StatelessWidget {
   const RegisterPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return const _RegisterPageView();
+    return BlocProvider(create: (context) => RegisterCubit(), child: _RegisterPageView());
   }
 }
 
-class _RegisterPageView extends StatelessWidget {
+class _RegisterPageView extends StatefulWidget {
   const _RegisterPageView();
+
+  @override
+  State<_RegisterPageView> createState() => _RegisterPageViewState();
+}
+
+class _RegisterPageViewState extends State<_RegisterPageView> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _register(BuildContext context) {
     final formCubit = context.read<RegisterCubit>();
     final authCubit = context.read<AuthCubit>();
 
-    if (formCubit.validateForm() && formCubit.state.acceptTerms) {
+    if (_formKey.currentState!.validate()) {
       final formData = formCubit.getFormData();
       authCubit.register(formData['email']!, formData['name']!, formData['password']!);
     }
@@ -36,7 +48,6 @@ class _RegisterPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, authState) {
           if (authState.isAuthenticated && authState.user != null) {
@@ -52,46 +63,30 @@ class _RegisterPageView extends StatelessWidget {
         },
         child: SafeArea(
           child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(40),
             child: BlocBuilder<RegisterCubit, RegisterFormState>(
               builder: (context, formState) {
                 final formCubit = context.read<RegisterCubit>();
 
                 return Form(
+                  key: _formKey,
                   onChanged: () => formCubit.updateFormValidity(),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Back Button
-                      IconButton(
-                        onPressed: () => Navigator.of(context).pop(),
-                        icon: const Icon(Icons.arrow_back),
-                        padding: EdgeInsets.zero,
-                      ),
-
-                      const SizedBox(height: 24),
-
-                      // Header
+                      // Gap(10.h), // Header
                       Center(
                         child: Column(
                           children: [
-                            Container(
-                              padding: const EdgeInsets.all(16),
-                              decoration: BoxDecoration(
-                                color: Colors.green.shade50,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: const Icon(Icons.person_add, size: 64, color: Colors.green),
-                            ),
                             const SizedBox(height: 24),
-                            const Text(
-                              'Create Account',
-                              style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
-                            ),
+                            Center(child: const Text('Hoşgeldiniz', style: AppTextStyles.bodyLarge)),
                             const SizedBox(height: 8),
-                            const Text(
-                              'Sign up to get started with Movie App',
-                              style: TextStyle(fontSize: 16, color: Colors.grey),
+                            Center(
+                              child: Text(
+                                textAlign: TextAlign.center,
+                                'Tempus varius a vitae interdum id tortor elementum tristique eleifend at.',
+                                style: AppTextStyles.bodyMedium,
+                              ).symmetricPadding(horizontal: 12),
                             ),
                           ],
                         ),
@@ -103,10 +98,12 @@ class _RegisterPageView extends StatelessWidget {
                       CustomTextField(
                         hint: 'Ad Soyad',
                         controller: formCubit.nameController,
+                        keyboardType: TextInputType.name,
                         validator: formCubit.validateName,
+                        prefixIcon: SvgWidget(svgPath: SvgEnum.addUser.svgPath, color: AppColors.white).allPadding(12),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 14),
 
                       // Email Field
                       CustomTextField(
@@ -114,9 +111,10 @@ class _RegisterPageView extends StatelessWidget {
                         controller: formCubit.emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: formCubit.validateEmail,
+                        prefixIcon: SvgWidget(svgPath: SvgEnum.message.svgPath, color: AppColors.white).allPadding(12),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 14),
 
                       // Password Field
                       CustomTextField(
@@ -125,34 +123,27 @@ class _RegisterPageView extends StatelessWidget {
                         obscureText: formState.obscurePassword,
                         validator: formCubit.validatePassword,
                         onChanged: formCubit.onPasswordChanged,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            formState.obscurePassword ? Icons.visibility_off : Icons.visibility,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () => formCubit.togglePasswordVisibility(),
-                        ),
+                        prefixIcon: SvgWidget(svgPath: SvgEnum.unlock.svgPath, color: AppColors.white).allPadding(12),
+                        suffixIcon:
+                            formState.obscurePassword
+                                ? GestureDetector(
+                                  onTap: () => formCubit.togglePasswordVisibility(),
+                                  child: SvgWidget(
+                                    svgPath: SvgEnum.hide.svgPath,
+                                    color: AppColors.white,
+                                  ).allPadding(12),
+                                )
+                                : IconButton(
+                                  icon: Icon(
+                                    formState.obscurePassword
+                                        ? Icons.visibility_off_outlined
+                                        : Icons.visibility_outlined,
+                                  ),
+                                  onPressed: () => formCubit.togglePasswordVisibility(),
+                                ),
                       ),
 
-                      // Password Strength Indicator
-                      if (formState.passwordStrength != null) ...[
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Text('Password Strength: ', style: TextStyle(fontSize: 12, color: Colors.grey.shade600)),
-                            Text(
-                              formState.passwordStrength!,
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: _getPasswordStrengthColor(formState.passwordStrength!),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 14),
 
                       // Confirm Password Field
                       CustomTextField(
@@ -160,26 +151,33 @@ class _RegisterPageView extends StatelessWidget {
                         controller: formCubit.confirmPasswordController,
                         obscureText: formState.obscureConfirmPassword,
                         validator: formCubit.validateConfirmPassword,
-                        suffixIcon: IconButton(
-                          icon: Icon(
-                            formState.obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                            color: Colors.grey,
-                          ),
-                          onPressed: () => formCubit.toggleConfirmPasswordVisibility(),
-                        ),
+                        prefixIcon: SvgWidget(svgPath: SvgEnum.unlock.svgPath, color: AppColors.white).allPadding(12),
                       ),
 
-                      const SizedBox(height: 24),
+                      const SizedBox(height: 16),
 
                       // Terms and Conditions
-                      Row(
+                      Wrap(
                         children: [
-                          Checkbox(value: formState.acceptTerms, onChanged: (_) => formCubit.toggleAcceptTerms()),
-                          const Expanded(
+                          Text(
+                            'Kullanıcı sözleşmesini ',
+                            style: AppTextStyles.bodyMedium.copyWith(fontSize: 12, color: AppColors.textSecondary),
+                          ),
+                          GestureDetector(
+                            onTap: () {
+                              // Terms page navigation
+                            },
                             child: Text(
-                              'I accept the Terms and Conditions and Privacy Policy',
-                              style: TextStyle(fontSize: 14, color: Colors.grey),
+                              'okudum ve kabul ediyorum.',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                decoration: TextDecoration.underline,
+                                fontSize: 12,
+                              ),
                             ),
+                          ),
+                          Text(
+                            'Bu sözleşmeyi okuyarak devam ediniz lütfen.',
+                            style: AppTextStyles.bodyMedium.copyWith(fontSize: 12, color: AppColors.textSecondary),
                           ),
                         ],
                       ),
@@ -190,12 +188,55 @@ class _RegisterPageView extends StatelessWidget {
                       BlocBuilder<AuthCubit, AuthState>(
                         builder: (context, authState) {
                           return CustomButton(
-                            text: 'Create Account',
-                            onPressed: formState.isValid ? () => _register(context) : null,
+                            text: 'Şimdi Kaydol',
+                            onPressed:
+                                () => _register(
+                                  context,
+                                ), //formState.isValid && formState.acceptTerms ? () => _register(context) : null,
                             isLoading: authState.isLoading,
-                            backgroundColor: Colors.green,
                           );
                         },
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      // Social Login Buttons
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            height: 60,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.white10Opacity,
+                              border: Border.all(color: AppColors.white20Opacity),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: SvgWidget(svgPath: SvgEnum.google.svgPath, color: AppColors.white),
+                          ),
+                          Gap(8),
+                          Container(
+                            height: 60,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.white10Opacity,
+                              border: Border.all(color: AppColors.white20Opacity),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: SvgWidget(svgPath: SvgEnum.apple.svgPath, color: AppColors.white),
+                          ),
+                          Gap(8),
+                          Container(
+                            height: 60,
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: AppColors.white10Opacity,
+                              border: Border.all(color: AppColors.white20Opacity),
+                              borderRadius: BorderRadius.circular(18),
+                            ),
+                            child: SvgWidget(svgPath: SvgEnum.facebook.svgPath, color: AppColors.white),
+                          ),
+                        ],
                       ),
 
                       const SizedBox(height: 32),
@@ -205,13 +246,10 @@ class _RegisterPageView extends StatelessWidget {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text('Already have an account? ', style: TextStyle(color: Colors.grey)),
+                            const Text("Zaten bir hesabın var mı? ", style: TextStyle(color: AppColors.textSecondary)),
                             GestureDetector(
                               onTap: () => Navigator.of(context).pop(),
-                              child: const Text(
-                                'Sign In',
-                                style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
-                              ),
+                              child: const Text('Giriş Yap!', style: AppTextStyles.bodyMedium),
                             ),
                           ],
                         ),
@@ -225,18 +263,5 @@ class _RegisterPageView extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _getPasswordStrengthColor(String strength) {
-    switch (strength) {
-      case 'Very Strong':
-        return Colors.green;
-      case 'Strong':
-        return Colors.lightGreen;
-      case 'Medium':
-        return Colors.orange;
-      default:
-        return Colors.red;
-    }
   }
 }

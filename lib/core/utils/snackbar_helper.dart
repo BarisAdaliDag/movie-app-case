@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/theme/app_colors.dart';
 
 class SnackBarHelper {
   static void showError(BuildContext context, String message) {
@@ -6,9 +7,16 @@ class SnackBarHelper {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Row(
-          children: [Expanded(child: Text(message, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500)))],
+          children: [
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+              ),
+            ),
+          ],
         ),
-        backgroundColor: Colors.red,
+        backgroundColor: AppColors.primaryColor,
         duration: const Duration(seconds: 3),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
@@ -25,7 +33,12 @@ class SnackBarHelper {
           children: [
             const Icon(Icons.check_circle_outline, color: Colors.white, size: 20),
             const SizedBox(width: 12),
-            Expanded(child: Text(message, style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500))),
+            Expanded(
+              child: Text(
+                message,
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500, color: Colors.white),
+              ),
+            ),
           ],
         ),
         backgroundColor: Colors.green,

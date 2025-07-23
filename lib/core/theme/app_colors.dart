@@ -13,13 +13,13 @@ class AppColors {
   static const Color textSecondary = Color(0x80FFFFFF);
   static const Color grey = Colors.grey;
   static const Color white = Colors.white;
-  static const Color white20Opacity = Color(0x33FFFFFF);
+  static const Color white20Opacity = Color.fromRGBO(255, 255, 255, 0.20);
 
   /// %10 saydam beyaz → CSS: #FFFFFF1A
-  static const Color white10Opacity = Color(0x1AFFFFFF);
+  static const Color white10Opacity = Color.fromRGBO(255, 255, 255, 0.092);
 
   /// Background için %10 saydam beyaz
-  static const Color backgroundWhite10 = Color(0x1AFFFFFF);
+  static const Color backgroundWhite10 = Color(0xFF222222);
   static Color white50 = Color(0x80FFFFFF).withOpacity(0.5);
 
   static const Color scaffoldBackground = Color(0xFF090909);
