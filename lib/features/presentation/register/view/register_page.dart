@@ -101,8 +101,7 @@ class _RegisterPageView extends StatelessWidget {
 
                       // Name Field
                       CustomTextField(
-                        label: 'Full Name',
-                        hint: 'Enter your full name',
+                        hint: 'Ad Soyad',
                         controller: formCubit.nameController,
                         validator: formCubit.validateName,
                       ),
@@ -111,8 +110,7 @@ class _RegisterPageView extends StatelessWidget {
 
                       // Email Field
                       CustomTextField(
-                        label: 'Email Address',
-                        hint: 'Enter your email',
+                        hint: 'E-Posta',
                         controller: formCubit.emailController,
                         keyboardType: TextInputType.emailAddress,
                         validator: formCubit.validateEmail,
@@ -122,8 +120,7 @@ class _RegisterPageView extends StatelessWidget {
 
                       // Password Field
                       CustomTextField(
-                        label: 'Password',
-                        hint: 'Enter your password',
+                        hint: 'Şifre',
                         controller: formCubit.passwordController,
                         obscureText: formState.obscurePassword,
                         validator: formCubit.validatePassword,
@@ -159,8 +156,7 @@ class _RegisterPageView extends StatelessWidget {
 
                       // Confirm Password Field
                       CustomTextField(
-                        label: 'Confirm Password',
-                        hint: 'Confirm your password',
+                        hint: 'Şifre Tekrar',
                         controller: formCubit.confirmPasswordController,
                         obscureText: formState.obscureConfirmPassword,
                         validator: formCubit.validateConfirmPassword,

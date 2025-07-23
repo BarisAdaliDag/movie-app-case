@@ -20,6 +20,7 @@ class AppColors {
 
   /// Background için %10 saydam beyaz
   static const Color backgroundWhite10 = Color(0x1AFFFFFF);
+  static Color white50 = Color(0x80FFFFFF).withOpacity(0.5);
 
   static const Color scaffoldBackground = Color(0xFF090909);
   static const Color cardBackground = Color(0xFF242424);

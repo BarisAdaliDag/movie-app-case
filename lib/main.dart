@@ -6,6 +6,7 @@ import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_cubit.dart';
 import 'package:movieapp/features/presentation/splash/splash_page.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -21,14 +22,18 @@ class MovieApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (context) => getIt<AuthCubit>()..checkAuthStatus()),
-        BlocProvider(create: (context) => LoginCubit()),
-        BlocProvider(create: (context) => RegisterCubit()),
+        BlocProvider(create: (context) => getIt<LoginCubit>()),
+        BlocProvider(create: (context) => getIt<RegisterCubit>()),
       ],
-      child: MaterialApp(
-        title: 'Movie App',
-        theme: AppTheme.darkTheme,
-        home: const SplashPage(),
-        debugShowCheckedModeBanner: false,
+      child: ResponsiveSizer(
+        builder: (context, orientation, screenType) {
+          return MaterialApp(
+            title: 'Movie App',
+            theme: AppTheme.darkTheme,
+            home: const SplashPage(),
+            debugShowCheckedModeBanner: false,
+          );
+        },
       ),
     );
   }

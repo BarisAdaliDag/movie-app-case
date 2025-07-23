@@ -1,6 +1,11 @@
 /// Svg enum
 enum SvgEnum {
-  cancelIcon('cancel-icon'),
+  message('message'),
+  unlock('unlock'),
+  hide('hide'),
+  google('google'),
+  apple('apple'),
+  facebook('facebook'),
 
   plus('plus');
 
