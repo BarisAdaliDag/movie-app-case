@@ -1,45 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
-import 'package:movieapp/features/presentation/pages/photo_upload_page.dart';
-import '../cubit/auth_cubit.dart';
-import '../cubit/auth_state.dart';
-import '../widgets/custom_button.dart';
-import '../widgets/custom_text_field.dart';
-import 'profile_page.dart';
+import 'package:movieapp/features/data/cubit/auth_cubit.dart';
+import 'package:movieapp/features/data/cubit/auth_state.dart';
+import '../../../../core/widgets/custom_button.dart';
+import '../../../../core/widgets/custom_text_field.dart';
+import '../../profile/profile_page.dart';
+import '../../register/view/register_page.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _emailController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
+  final _emailController = TextEditingController(text: 'safa@nodelabs.com');
+  final _passwordController = TextEditingController(text: '123451');
   bool _obscurePassword = true;
-  bool _obscureConfirmPassword = true;
 
   @override
   void dispose() {
     _emailController.dispose();
-    _nameController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
-  void _register() {
+  void _login() {
     if (_formKey.currentState!.validate()) {
-      context.read<AuthCubit>().register(
-        _emailController.text.trim(),
-        _nameController.text.trim(),
-        _passwordController.text,
-      );
+      context.read<AuthCubit>().login(_emailController.text.trim(), _passwordController.text);
     }
   }
 
@@ -51,16 +42,14 @@ class _RegisterPageState extends State<RegisterPage> {
         listener: (context, state) {
           // Success - Navigate to Profile
           if (state.isAuthenticated && state.user != null) {
-            // SnackBarHelper.showSuccess(context, 'Kayıt başarılı! Hoş geldiniz!');
-            Navigator.of(
-              context,
-            ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
             return;
           }
 
           // Error - Show SnackBar
           if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
             SnackBarHelper.showError(context, state.errorMessage!);
+            // Clear error after showing
             context.read<AuthCubit>().clearError();
           }
         },
@@ -73,14 +62,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Back Button
-                    IconButton(
-                      onPressed: () => Navigator.of(context).pop(),
-                      icon: const Icon(Icons.arrow_back),
-                      padding: EdgeInsets.zero,
-                    ),
-
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 40),
 
                     // Header
                     Center(
@@ -89,44 +71,26 @@ class _RegisterPageState extends State<RegisterPage> {
                           Container(
                             padding: const EdgeInsets.all(16),
                             decoration: BoxDecoration(
-                              color: Colors.green.shade50,
+                              color: Colors.blue.shade50,
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: const Icon(Icons.person_add, size: 64, color: Colors.green),
+                            child: const Icon(Icons.movie, size: 64, color: Colors.blue),
                           ),
                           const SizedBox(height: 24),
                           const Text(
-                            'Create Account',
+                            'Welcome Back!',
                             style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.black87),
                           ),
                           const SizedBox(height: 8),
                           const Text(
-                            'Sign up to get started with Movie App',
+                            'Sign in to continue to Movie App',
                             style: TextStyle(fontSize: 16, color: Colors.grey),
                           ),
                         ],
                       ),
                     ),
 
-                    const SizedBox(height: 40),
-
-                    // Name Field
-                    CustomTextField(
-                      label: 'Full Name',
-                      hint: 'Enter your full name',
-                      controller: _nameController,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Name is required';
-                        }
-                        if (value.length < 2) {
-                          return 'Name must be at least 2 characters';
-                        }
-                        return null;
-                      },
-                    ),
-
-                    const SizedBox(height: 24),
+                    const SizedBox(height: 48),
 
                     // Email Field
                     CustomTextField(
@@ -172,58 +136,49 @@ class _RegisterPageState extends State<RegisterPage> {
                       ),
                     ),
 
+                    const SizedBox(height: 32),
+
+                    // Login Button
+                    CustomButton(text: 'Sign In', onPressed: _login, isLoading: state.isLoading),
+
                     const SizedBox(height: 24),
 
-                    // Confirm Password Field
-                    CustomTextField(
-                      label: 'Confirm Password',
-                      hint: 'Confirm your password',
-                      controller: _confirmPasswordController,
-                      obscureText: _obscureConfirmPassword,
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Confirm password is required';
-                        }
-                        if (value != _passwordController.text) {
-                          return 'Passwords do not match';
-                        }
-                        return null;
-                      },
-                      suffixIcon: IconButton(
-                        icon: Icon(
-                          _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
-                          color: Colors.grey,
-                        ),
-                        onPressed: () {
-                          setState(() {
-                            _obscureConfirmPassword = !_obscureConfirmPassword;
-                          });
-                        },
+                    // Test Account Info
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade50,
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade200),
+                      ),
+                      child: const Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            '🧪 Test Account',
+                            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.orange),
+                          ),
+                          SizedBox(height: 8),
+                          Text('Email: safa@nodelabs.com', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                          Text('Password: 123451', style: TextStyle(fontSize: 13, color: Colors.grey)),
+                        ],
                       ),
                     ),
 
                     const SizedBox(height: 32),
 
-                    // Register Button
-                    CustomButton(
-                      text: 'Create Account',
-                      onPressed: _register,
-                      isLoading: state.isLoading,
-                      backgroundColor: Colors.green,
-                    ),
-
-                    const SizedBox(height: 32),
-
-                    // Login Link
+                    // Register Link
                     Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Text('Already have an account? ', style: TextStyle(color: Colors.grey)),
+                          const Text("Don't have an account? ", style: TextStyle(color: Colors.grey)),
                           GestureDetector(
-                            onTap: () => Navigator.of(context).pop(),
+                            onTap: () {
+                              Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
+                            },
                             child: const Text(
-                              'Sign In',
+                              'Sign Up',
                               style: TextStyle(color: Colors.blue, fontWeight: FontWeight.w600),
                             ),
                           ),
