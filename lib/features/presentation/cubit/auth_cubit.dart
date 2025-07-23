@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movieapp/features/auth/data/models/login_request_model.dart';
-import 'package:movieapp/features/auth/data/models/register_request_model.dart';
-import 'package:movieapp/features/auth/data/repositories/auth_repository.dart';
+import 'package:movieapp/features/data/models/auth/login_request_model.dart';
+import 'package:movieapp/features/data/models/auth/register_request_model.dart';
+import 'package:movieapp/features/data/repositories/auth/auth_repository.dart';
 
 import 'auth_state.dart';
 

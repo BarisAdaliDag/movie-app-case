@@ -1,9 +1,9 @@
 import 'dart:io';
 
 import 'package:movieapp/core/error/failures.dart';
-import 'package:movieapp/features/auth/data/models/login_request_model.dart';
-import 'package:movieapp/features/auth/data/models/register_request_model.dart';
-import 'package:movieapp/features/auth/data/models/user_model.dart';
+import 'package:movieapp/features/data/models/auth/login_request_model.dart';
+import 'package:movieapp/features/data/models/auth/register_request_model.dart';
+import 'package:movieapp/features/data/models/auth/user_model.dart';
 
 import '../../../../core/error/either.dart';
 

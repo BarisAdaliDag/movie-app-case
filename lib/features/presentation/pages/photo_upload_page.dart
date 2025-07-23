@@ -4,11 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
-import 'package:movieapp/features/auth/data/models/user_model.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
-import 'package:movieapp/features/auth/presentation/pages/profile_page.dart';
-import 'package:movieapp/features/auth/presentation/widgets/custom_button.dart';
+import 'package:movieapp/features/data/models/auth/user_model.dart';
+import 'package:movieapp/features/presentation/cubit/auth_cubit.dart';
+import 'package:movieapp/features/presentation/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/pages/profile_page.dart';
+import 'package:movieapp/features/presentation/widgets/custom_button.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PhotoUploadPage extends StatefulWidget {

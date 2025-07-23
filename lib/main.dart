@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
-import 'features/auth/presentation/pages/splash_page.dart';
+import 'package:movieapp/features/presentation/cubit/auth_cubit.dart';
+import 'features/presentation/pages/splash_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

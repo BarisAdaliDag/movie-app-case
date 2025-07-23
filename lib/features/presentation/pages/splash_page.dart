@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_state.dart';
-import 'package:movieapp/features/auth/presentation/pages/photo_upload_page.dart';
+import 'package:movieapp/features/presentation/cubit/auth_cubit.dart';
+import 'package:movieapp/features/presentation/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/pages/photo_upload_page.dart';
 import '../widgets/loading_widget.dart';
 import 'login_page.dart';
 import 'profile_page.dart';

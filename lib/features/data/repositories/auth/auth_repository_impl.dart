@@ -5,11 +5,11 @@ import 'package:dio/dio.dart';
 import 'package:movieapp/core/error/error_handler.dart';
 import 'package:movieapp/core/error/failures.dart';
 import 'package:movieapp/core/services/photo_upload_service.dart';
-import 'package:movieapp/features/auth/data/datasources/auth_datasource.dart';
-import 'package:movieapp/features/auth/data/models/login_request_model.dart';
-import 'package:movieapp/features/auth/data/models/register_request_model.dart';
-import 'package:movieapp/features/auth/data/models/user_model.dart';
-import 'package:movieapp/features/auth/data/repositories/auth_repository.dart';
+import 'package:movieapp/features/data/datasources/auth/auth_datasource.dart';
+import 'package:movieapp/features/data/models/auth/login_request_model.dart';
+import 'package:movieapp/features/data/models/auth/register_request_model.dart';
+import 'package:movieapp/features/data/models/auth/user_model.dart';
+import 'package:movieapp/features/data/repositories/auth/auth_repository.dart';
 import '../../../../core/error/either.dart';
 
 class AuthRepositoryImpl implements AuthRepository {

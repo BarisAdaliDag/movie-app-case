@@ -1,4 +1,4 @@
-import '../../data/models/user_model.dart';
+import 'package:movieapp/features/data/models/auth/user_model.dart';
 
 class AuthState {
   final bool isLoading;

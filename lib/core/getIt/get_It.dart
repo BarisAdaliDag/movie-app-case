@@ -1,9 +1,9 @@
 import 'package:get_it/get_it.dart';
-import 'package:movieapp/features/auth/data/datasources/auth_datasource.dart';
-import 'package:movieapp/features/auth/data/datasources/auth_remote_data_source.dart';
-import 'package:movieapp/features/auth/data/repositories/auth_repository.dart';
-import 'package:movieapp/features/auth/data/repositories/auth_repository_impl.dart';
-import 'package:movieapp/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:movieapp/features/data/datasources/auth/auth_remote_data_source.dart';
+import '../../features/data/datasources/auth/auth_datasource.dart';
+import '../../features/data/repositories/auth/auth_repository.dart';
+import '../../features/data/repositories/auth/auth_repository_impl.dart';
+import '../../features/presentation/cubit/auth_cubit.dart';
 import '../network/network_client.dart';
 
 //Service locator for dependency injection

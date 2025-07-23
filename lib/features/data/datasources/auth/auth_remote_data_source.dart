@@ -1,6 +1,6 @@
-import 'package:movieapp/features/auth/data/models/login_request_model.dart';
-import 'package:movieapp/features/auth/data/models/register_request_model.dart';
-import 'package:movieapp/features/auth/data/models/user_model.dart';
+import 'package:movieapp/features/data/models/auth/login_request_model.dart';
+import 'package:movieapp/features/data/models/auth/register_request_model.dart';
+import 'package:movieapp/features/data/models/auth/user_model.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/network_client.dart';
 import '../../../../core/utils/secure_storage.dart';
