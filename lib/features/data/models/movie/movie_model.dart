@@ -6,28 +6,51 @@ part 'movie_model.g.dart';
 class MovieModel {
   @JsonKey(name: '_id')
   final String id;
+  @JsonKey(name: 'Title')
   final String title;
+  @JsonKey(name: 'Year')
   final String year;
+  @JsonKey(name: 'Rated')
   final String rated;
+  @JsonKey(name: 'Released')
   final String released;
+  @JsonKey(name: 'Runtime')
   final String runtime;
+  @JsonKey(name: 'Genre')
   final String genre;
+  @JsonKey(name: 'Director')
   final String director;
+  @JsonKey(name: 'Writer')
   final String writer;
+  @JsonKey(name: 'Actors')
   final String actors;
+  @JsonKey(name: 'Plot')
   final String plot;
+  @JsonKey(name: 'Language')
   final String language;
+  @JsonKey(name: 'Country')
   final String country;
+  @JsonKey(name: 'Awards')
   final String awards;
+  @JsonKey(name: 'Poster')
   final String poster;
+  @JsonKey(name: 'Metascore')
   final String metascore;
+  @JsonKey(name: 'imdbRating')
   final String imdbRating;
+  @JsonKey(name: 'imdbVotes')
   final String imdbVotes;
+  @JsonKey(name: 'imdbID')
   final String imdbID;
+  @JsonKey(name: 'Type')
   final String type;
+  @JsonKey(name: 'Response')
   final String response;
+  @JsonKey(name: 'Images', defaultValue: <String>[])
   final List<String> images;
+  @JsonKey(name: 'comingSoon', defaultValue: false)
   final bool comingSoon;
+  @JsonKey(name: 'isFavorite', defaultValue: false)
   final bool isFavorite;
 
   MovieModel({

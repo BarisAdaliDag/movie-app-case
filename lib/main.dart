@@ -5,6 +5,7 @@ import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_theme.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
+import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 void main() {
@@ -18,8 +19,11 @@ class MovieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => getIt<AuthCubit>()..checkAuthStatus(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => getIt<AuthCubit>()..checkAuthStatus()),
+        BlocProvider(create: (context) => getIt<HomeCubit>()),
+      ],
       child: ResponsiveSizer(
         builder: (context, orientation, screenType) {
           return MaterialApp(

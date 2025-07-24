@@ -1,4 +1,4 @@
-import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:movieapp/core/constants/api_constants.dart';
 import 'package:movieapp/core/network/network_client.dart';
 import 'package:movieapp/features/data/datasources/movie/movie_datasource.dart';
@@ -15,7 +15,9 @@ class MovieRemoteDatasource implements MovieDatasource {
       endpoint: '${ApiConstants.movieList}?page=$page',
       headers: {ApiConstants.authorization: token, 'accept': 'application/json'},
     );
+    debugPrint(response.toString());
     final moviesJson = response['data']['movies'] as List;
+    debugPrint(moviesJson.toString());
     return moviesJson.map((e) => MovieModel.fromJson(e)).toList();
   }
 
