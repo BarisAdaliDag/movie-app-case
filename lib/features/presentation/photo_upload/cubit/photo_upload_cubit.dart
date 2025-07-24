@@ -2,8 +2,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:movieapp/core/routes/navigation_helper.dart';
+import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
-import 'package:movieapp/features/presentation/profile/profile_page.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'photo_upload_state.dart';
 
@@ -63,9 +64,9 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
           authCubit.getProfile(); // Refresh user profile
 
           if (shouldPop) {
-            Navigator.of(context).pop();
+            Navigation.ofPop();
           } else {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+            Navigation.pushReplacementNamed(root: Routes.profile);
           }
           return true;
         } else {
@@ -88,9 +89,9 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
   Future<bool> skipPhotoUpload(BuildContext context, {bool shouldPop = false}) async {
     if (context.mounted) {
       if (shouldPop) {
-        Navigator.of(context).pop();
+        Navigation.ofPop();
       } else {
-        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+        Navigation.pushReplacementNamed(root: Routes.profile);
       }
       return true;
     }

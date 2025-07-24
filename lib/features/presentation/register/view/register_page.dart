@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
+import 'package:movieapp/core/routes/navigation_helper.dart';
+import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
@@ -9,7 +11,6 @@ import 'package:movieapp/core/widgets/custom_text_field.dart';
 import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
-import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_cubit.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_state.dart';
 import 'package:movieapp/core/widgets/auth/auth_widgets.dart';
@@ -42,9 +43,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
   }
 
   void _onAuthenticated(BuildContext context, AuthState state) {
-    Navigator.of(
-      context,
-    ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!, showBackButton: false)));
+    Navigation.pushNamedAndRemoveAll(root: Routes.photoUpload, arg: {'user': state.user!, 'showBackButton': false});
   }
 
   @override
@@ -142,7 +141,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
                   AuthNavigationLink(
                     text: "Zaten bir hesabın var mı? ",
                     linkText: 'Giriş Yap!',
-                    onPressed: () => Navigator.of(context).pop(),
+                    onPressed: () => Navigation.ofPop(),
                   ),
                 ],
               ),

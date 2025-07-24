@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/routes/navigation_helper.dart';
+import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
-import 'package:movieapp/features/presentation/login/view/login_page.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
@@ -21,7 +22,8 @@ class ProfilePage extends StatelessWidget {
             TextButton(onPressed: () => Navigator.of(context).pop(), child: const Text('Cancel')),
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                // Navigator.of(context).pop();
+                Navigation.pushReplacementNamed(root: Routes.login);
                 context.read<AuthCubit>().logout();
               },
               child: const Text('Logout', style: TextStyle(color: Colors.red)),
@@ -49,9 +51,11 @@ class ProfilePage extends StatelessWidget {
                 icon: const Icon(Icons.add_a_photo, color: Colors.blue),
                 tooltip: 'Upload Photo',
                 onPressed: () async {
-                  await Navigator.of(
-                    context,
-                  ).push(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+                  // await Navigation.pushNamed(
+                  //   root: Routes.photoUpload,
+                  //   arg: {'user': state.user!, 'showBackButton': true},
+                  // );
+                  Navigation.push(page: PhotoUploadPage(user: state.user!, showBackButton: true));
 
                   // Refresh profile when returning from photo upload
                   if (context.mounted) {
@@ -66,7 +70,7 @@ class ProfilePage extends StatelessWidget {
       body: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (!state.isAuthenticated && !state.isLoading) {
-            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
+            Navigation.pushReplacementNamed(root: Routes.login);
           }
 
           if (state.errorMessage != null) {

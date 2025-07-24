@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
+import 'package:movieapp/core/routes/navigation_helper.dart';
+import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
@@ -11,8 +13,6 @@ import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_state.dart';
-import 'package:movieapp/features/presentation/profile/profile_page.dart';
-import 'package:movieapp/features/presentation/register/view/register_page.dart';
 import 'package:movieapp/core/widgets/auth/auth_widgets.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -44,7 +44,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
   }
 
   void _onAuthenticated(BuildContext context, AuthState state) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+    Navigation.pushReplacementNamed(root: Routes.profile);
   }
 
   @override
@@ -130,7 +130,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
                     text: "Bir hesabın yok mu? ",
                     linkText: 'Kayıt Ol!',
                     onPressed: () {
-                      Navigator.of(context).push(MaterialPageRoute(builder: (_) => const RegisterPage()));
+                      Navigation.pushNamed(root: Routes.register);
                     },
                   ),
                 ],

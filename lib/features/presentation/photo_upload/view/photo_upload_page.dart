@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/getIt/get_It.dart';
+import 'package:movieapp/core/routes/navigation_helper.dart';
+import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
@@ -43,9 +45,12 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
   Future<void> _handleContinue() async {
     final bool success = await context.read<PhotoUploadCubit>().uploadPhoto(context, shouldPop: widget.showBackButton);
 
-    // If navigating from profile and success, pop with success indicator
-    if (widget.showBackButton && success && mounted) {
-      Navigator.of(context).pop(true);
+    // // If navigating from profile and success, pop with success indicator
+    if (widget.showBackButton && mounted) {
+      // Navigation.ofPop();
+      Navigator.pop(context, true);
+    } else {
+      Navigation.pushNamed(root: Routes.profile);
     }
   }
 
@@ -60,7 +65,7 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
                 ? () {
                   // When going back, logout the user to reset auth state
 
-                  Navigator.of(context).pop();
+                  Navigation.ofPop();
                 }
                 : null,
       ),
