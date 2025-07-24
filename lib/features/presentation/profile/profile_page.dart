@@ -48,8 +48,15 @@ class ProfilePage extends StatelessWidget {
               return IconButton(
                 icon: const Icon(Icons.add_a_photo, color: Colors.blue),
                 tooltip: 'Upload Photo',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+                onPressed: () async {
+                  await Navigator.of(
+                    context,
+                  ).push(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+
+                  // Refresh profile when returning from photo upload
+                  if (context.mounted) {
+                    context.read<AuthCubit>().getProfile();
+                  }
                 },
               );
             },

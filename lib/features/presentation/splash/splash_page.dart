@@ -19,9 +19,7 @@ class SplashPage extends StatelessWidget {
           if (!state.isLoading) {
             await Future.delayed(const Duration(seconds: 2));
             if (state.isAuthenticated && state.user != null) {
-              Navigator.of(
-                context,
-              ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+              Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => ProfilePage()));
             } else {
               Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const LoginPage()));
             }

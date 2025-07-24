@@ -42,7 +42,9 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
   }
 
   void _onAuthenticated(BuildContext context, AuthState state) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!)));
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => PhotoUploadPage(user: state.user!, showBackButton: false)));
   }
 
   @override

@@ -5,10 +5,10 @@ import 'package:movieapp/features/presentation/register/cubit/register_state.dar
 class RegisterCubit extends Cubit<RegisterFormState> {
   RegisterCubit() : super(const RegisterFormState());
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController emailController = TextEditingController(text: 'ada2@gmail.com');
+  final TextEditingController nameController = TextEditingController(text: "ada");
+  final TextEditingController passwordController = TextEditingController(text: "password123");
+  final TextEditingController confirmPasswordController = TextEditingController(text: "password123");
 
   @override
   Future<void> close() {

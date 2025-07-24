@@ -4,7 +4,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:movieapp/core/utils/snackbar_helper.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'photo_upload_state.dart';
 
@@ -48,15 +47,27 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
     return state.selectedImage;
   }
 
-  Future<void> uploadPhoto(BuildContext context) async {
+  Future<bool> uploadPhoto(BuildContext context, {bool shouldPop = false}) async {
     if (state.selectedImage != null) {
+      // Set uploading state to true
+      emit(state.copyWith(isUploading: true, clearError: true));
+
       final result = await authCubit.uploadProfilePhoto(state.selectedImage!);
+
+      // Set uploading state to false
+      emit(state.copyWith(isUploading: false));
 
       if (context.mounted) {
         if (result == true && authCubit.state.user?.photoUrl != null) {
           SnackBarHelper.showSuccess(context, 'Profil fotoğrafı başarıyla yüklendi!');
           authCubit.getProfile(); // Refresh user profile
-          Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+
+          if (shouldPop) {
+            Navigator.of(context).pop();
+          } else {
+            Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+          }
+          return true;
         } else {
           print(authCubit.state.errorMessage);
 
@@ -67,13 +78,23 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
           }
 
           SnackBarHelper.showError(context, errorMessage);
+          return false;
         }
       }
     }
+    return false;
   }
 
-  void skipPhotoUpload(BuildContext context) {
-    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+  Future<bool> skipPhotoUpload(BuildContext context, {bool shouldPop = false}) async {
+    if (context.mounted) {
+      if (shouldPop) {
+        Navigator.of(context).pop();
+      } else {
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => const ProfilePage()));
+      }
+      return true;
+    }
+    return false;
   }
 
   void setCanSkip(bool canSkip) {

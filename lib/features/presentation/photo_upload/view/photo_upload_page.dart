@@ -1,159 +1,137 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:movieapp/core/getIt/get_It.dart';
-import 'package:movieapp/core/theme/app_colors.dart';
-import 'package:movieapp/core/theme/text_styles.dart';
-import 'package:movieapp/core/utils/snackbar_helper.dart';
+import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_cubit.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_state.dart';
-import 'package:movieapp/features/presentation/profile/profile_page.dart';
-import 'package:movieapp/core/widgets/custom_button.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:movieapp/features/presentation/photo_upload/view/widget/common_widgets.dart';
 
 class PhotoUploadPage extends StatelessWidget {
   final UserModel user;
+  final bool showBackButton;
 
-  const PhotoUploadPage({super.key, required this.user});
+  const PhotoUploadPage({super.key, required this.user, this.showBackButton = true});
 
   @override
   Widget build(BuildContext context) {
+    final authCubit = getIt<AuthCubit>();
+
     return MultiBlocProvider(
       providers: [
-        BlocProvider(create: (context) => getIt<AuthCubit>()),
-        BlocProvider(create: (context) => PhotoUploadCubit(authCubit: getIt<AuthCubit>())),
+        BlocProvider.value(value: authCubit),
+        BlocProvider(create: (context) => PhotoUploadCubit(authCubit: authCubit)),
       ],
-      child: _PhotoUploadPageView(user: user),
+      child: _PhotoUploadPageView(user: user, showBackButton: showBackButton),
     );
   }
 }
 
-class _PhotoUploadPageView extends StatelessWidget {
+class _PhotoUploadPageView extends StatefulWidget {
   final UserModel user;
+  final bool showBackButton;
 
-  const _PhotoUploadPageView({required this.user});
+  const _PhotoUploadPageView({required this.user, this.showBackButton = true});
+
+  @override
+  State<_PhotoUploadPageView> createState() => _PhotoUploadPageViewState();
+}
+
+class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
+  Future<void> _handleContinue() async {
+    final bool success = await context.read<PhotoUploadCubit>().uploadPhoto(context, shouldPop: widget.showBackButton);
+
+    // If navigating from profile and success, pop with success indicator
+    if (widget.showBackButton && success && mounted) {
+      Navigator.of(context).pop(true);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: AppColors.white10Opacity,
-            borderRadius: BorderRadius.circular(22),
-            border: Border.all(color: AppColors.white20Opacity, width: 1),
-          ),
-          child: IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(Icons.arrow_back, color: AppColors.white, size: 20),
-          ),
-        ),
-        title: Text('Profil Detayı', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.w600)),
-        centerTitle: true,
+    Widget scaffold = Scaffold(
+      appBar: CustomAppBar(
+        title: 'Profil Detayı',
+        showBackButton: widget.showBackButton,
+        onBackPressed:
+            widget.showBackButton
+                ? () {
+                  // When going back, logout the user to reset auth state
+
+                  Navigator.of(context).pop();
+                }
+                : null,
       ),
-      body: BlocListener<AuthCubit, AuthState>(
-        listener: (context, authState) {
-          if (authState.errorMessage != null) {
-            SnackBarHelper.showError(context, authState.errorMessage!);
-            context.read<AuthCubit>().clearError();
-          }
-        },
-        child: BlocListener<PhotoUploadCubit, PhotoUploadState>(
-          listener: (context, formState) {
-            if (formState.imageError != null) {
-              SnackBarHelper.showError(context, formState.imageError!);
-              context.read<PhotoUploadCubit>().clearError();
-            }
-          },
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: BlocBuilder<PhotoUploadCubit, PhotoUploadState>(
-                builder: (context, formState) {
-                  return BlocBuilder<AuthCubit, AuthState>(
-                    builder: (context, authState) {
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 24),
+      body: _buildBody(context),
+    );
 
-                          // Title
-                          Center(child: Text('Fotoğraflarınızı Yükleyin', style: AppTextStyles.headline3)),
-                          const SizedBox(height: 8),
+    // If showBackButton is false (coming from registration), prevent back gesture
+    if (!widget.showBackButton) {
+      return PopScope(
+        canPop: false, // Prevent back navigation when coming from registration
+        child: scaffold,
+      );
+    }
 
-                          // Subtitle
-                          Center(
-                            child: Text(
-                              'Resources out incentivize \nrelaxation floor loss cc.',
-                              textAlign: TextAlign.center,
-                              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white),
-                            ),
+    return scaffold;
+  }
+
+  Widget _buildBody(BuildContext context) {
+    return ErrorBlocListener<AuthCubit, AuthState>(
+      errorExtractor: (state) => state.errorMessage,
+      clearErrorAction: (state) => () => context.read<AuthCubit>().clearError(),
+      child: ErrorBlocListener<PhotoUploadCubit, PhotoUploadState>(
+        errorExtractor: (state) => state.imageError,
+        clearErrorAction: (state) => () => context.read<PhotoUploadCubit>().clearError(),
+        child: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(24),
+            child: BlocBuilder<PhotoUploadCubit, PhotoUploadState>(
+              builder: (context, formState) {
+                return BlocBuilder<AuthCubit, AuthState>(
+                  builder: (context, authState) {
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const SizedBox(height: 24),
+
+                        // Header
+                        Center(
+                          child: const PageHeader(
+                            title: 'Fotoğraflarınızı Yükleyin',
+                            subtitle: 'Resources out incentivize \nrelaxation floor loss cc.',
                           ),
+                        ),
 
-                          const SizedBox(height: 40),
+                        const SizedBox(height: 40),
 
-                          // Photo Upload Area
-                          Center(
-                            child: GestureDetector(
-                              onTap:
-                                  authState.isLoading
-                                      ? null
-                                      : () => context.read<PhotoUploadCubit>().pickImageFromGallery(),
-                              child: Container(
-                                width: (40).w,
-                                height: (40).w,
-                                decoration: BoxDecoration(
-                                  color: AppColors.white10Opacity,
-                                  borderRadius: BorderRadius.circular(20),
-                                  border: Border.all(color: AppColors.white20Opacity, width: 1),
-                                ),
-                                child:
-                                    authState.isLoading
-                                        ? const Center(child: CircularProgressIndicator(color: AppColors.white))
-                                        : formState.selectedImage != null
-                                        ? ClipRRect(
-                                          borderRadius: BorderRadius.circular(19),
-                                          child: Image.file(formState.selectedImage!, fit: BoxFit.cover),
-                                        )
-                                        : const Center(
-                                          child: Icon(Icons.add, size: 48, color: AppColors.textSecondary),
-                                        ),
-                              ),
-                            ),
-                          ),
-
-                          const Spacer(),
-
-                          // Continue Button
-                          CustomButton(
-                            text: 'Devam Et',
-                            onPressed:
-                                authState.isLoading
+                        // Photo Upload Area
+                        Center(
+                          child: PhotoUploadContainer(
+                            selectedImage: formState.selectedImage,
+                            isLoading: formState.uploading || authState.isLoading,
+                            onTap:
+                                (formState.uploading || authState.isLoading)
                                     ? null
-                                    : () {
-                                      if (formState.selectedImage != null) {
-                                        context.read<PhotoUploadCubit>().uploadPhoto(context);
-                                      } else {
-                                        context.read<PhotoUploadCubit>().skipPhotoUpload(context);
-                                      }
-                                    },
-                            isLoading: authState.isLoading,
+                                    : () => context.read<PhotoUploadCubit>().pickImageFromGallery(),
                           ),
-                        ],
-                      );
-                    },
-                  );
-                },
-              ),
+                        ),
+
+                        const Spacer(),
+
+                        // Continue Button
+                        CustomButton(
+                          text: 'Devam Et',
+                          onPressed: (authState.isLoading || formState.uploading) ? null : () => _handleContinue(),
+                          isLoading: authState.isLoading || formState.uploading,
+                        ),
+                      ],
+                    );
+                  },
+                );
+              },
             ),
           ),
         ),

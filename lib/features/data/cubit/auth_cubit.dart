@@ -25,6 +25,11 @@ class AuthCubit extends Cubit<AuthState> {
 
   Future<void> getProfile() async {
     final result = await authRepository.getProfile();
+
+    result.fold(
+      (failure) => emit(state.copyWith(errorMessage: failure.errorMessage)),
+      (user) => emit(state.copyWith(user: user, isAuthenticated: true)),
+    );
   }
 
   Future<void> login(String email, String password) async {
