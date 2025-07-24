@@ -4,6 +4,7 @@ import 'package:movieapp/features/presentation/login/view/login_page.dart';
 import 'package:movieapp/features/presentation/register/view/register_page.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
+import 'package:movieapp/features/presentation/main/main_page.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 
 final class Routes {
@@ -12,6 +13,7 @@ final class Routes {
   static const splash = '/';
   static const login = '/login';
   static const register = '/register';
+  static const main = '/main';
   static const profile = '/profile';
   static const photoUpload = '/photo-upload';
 
@@ -23,6 +25,9 @@ final class Routes {
         return _materialPageRoute(const LoginPage());
       case register:
         return _materialPageRoute(const RegisterPage());
+      case main:
+        final mainArgs = routeSettings.arguments as Map<String, dynamic>?;
+        return _materialPageRoute(MainPage());
       case profile:
         return _materialPageRoute(const ProfilePage());
       case photoUpload:

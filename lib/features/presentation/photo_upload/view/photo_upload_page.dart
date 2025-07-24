@@ -7,6 +7,7 @@ import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/main/main_page.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_cubit.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_state.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/widget/common_widgets.dart';
@@ -43,14 +44,15 @@ class _PhotoUploadPageView extends StatefulWidget {
 
 class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
   Future<void> _handleContinue() async {
-    final bool success = await context.read<PhotoUploadCubit>().uploadPhoto(context, shouldPop: widget.showBackButton);
+    final result = await context.read<PhotoUploadCubit>().uploadPhoto(context, shouldPop: widget.showBackButton);
 
     // // If navigating from profile and success, pop with success indicator
     if (widget.showBackButton && mounted) {
-      // Navigation.ofPop();
-      Navigator.pop(context, true);
+      if (result == true) {
+        Navigation.ofPop();
+      }
     } else {
-      Navigation.pushNamed(root: Routes.profile);
+      Navigation.pushAndRemoveAll(page: MainPage(initialIndex: 1));
     }
   }
 
@@ -63,8 +65,6 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
         onBackPressed:
             widget.showBackButton
                 ? () {
-                  // When going back, logout the user to reset auth state
-
                   Navigation.ofPop();
                 }
                 : null,
@@ -72,12 +72,8 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
       body: _buildBody(context),
     );
 
-    // If showBackButton is false (coming from registration), prevent back gesture
     if (!widget.showBackButton) {
-      return PopScope(
-        canPop: false, // Prevent back navigation when coming from registration
-        child: scaffold,
-      );
+      return PopScope(canPop: false, child: scaffold);
     }
 
     return scaffold;

@@ -51,10 +51,6 @@ class ProfilePage extends StatelessWidget {
                 icon: const Icon(Icons.add_a_photo, color: Colors.blue),
                 tooltip: 'Upload Photo',
                 onPressed: () async {
-                  // await Navigation.pushNamed(
-                  //   root: Routes.photoUpload,
-                  //   arg: {'user': state.user!, 'showBackButton': true},
-                  // );
                   Navigation.push(page: PhotoUploadPage(user: state.user!, showBackButton: true));
 
                   // Refresh profile when returning from photo upload

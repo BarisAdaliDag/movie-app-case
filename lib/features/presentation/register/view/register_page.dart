@@ -11,6 +11,7 @@ import 'package:movieapp/core/widgets/custom_text_field.dart';
 import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_cubit.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_state.dart';
 import 'package:movieapp/core/widgets/auth/auth_widgets.dart';
@@ -43,7 +44,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
   }
 
   void _onAuthenticated(BuildContext context, AuthState state) {
-    Navigation.pushNamedAndRemoveAll(root: Routes.photoUpload, arg: {'user': state.user!, 'showBackButton': false});
+    Navigation.pushAndRemoveAll(page: PhotoUploadPage(user: state.user!, showBackButton: false));
   }
 
   @override

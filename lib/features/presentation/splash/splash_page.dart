@@ -17,7 +17,7 @@ class SplashPage extends StatelessWidget {
           if (!state.isLoading) {
             await Future.delayed(const Duration(seconds: 2));
             if (state.isAuthenticated && state.user != null) {
-              Navigation.pushReplacementNamed(root: Routes.profile);
+              Navigation.pushReplacementNamed(root: Routes.main);
             } else {
               Navigation.pushReplacementNamed(root: Routes.login);
             }

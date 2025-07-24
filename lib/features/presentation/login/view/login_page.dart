@@ -44,7 +44,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
   }
 
   void _onAuthenticated(BuildContext context, AuthState state) {
-    Navigation.pushReplacementNamed(root: Routes.profile);
+    Navigation.pushReplacementNamed(root: Routes.main);
   }
 
   @override

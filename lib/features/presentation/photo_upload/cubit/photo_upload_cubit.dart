@@ -24,14 +24,14 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
 
   Future<void> pickImageFromGallery() async {
     try {
-      emit(state.copyWith(isImagePickerOpen: true, clearError: true));
+      emit(state.copyWith(isImagePickerOpen: true, clearError: true, isUploading: true));
 
       final XFile? image = await _imagePicker.pickImage(source: ImageSource.gallery, imageQuality: 80);
 
       if (image != null) {
-        emit(state.copyWith(selectedImage: File(image.path), isImagePickerOpen: false));
+        emit(state.copyWith(selectedImage: File(image.path), isImagePickerOpen: false, isUploading: false));
       } else {
-        emit(state.copyWith(isImagePickerOpen: false));
+        emit(state.copyWith(isImagePickerOpen: false, isUploading: false));
       }
     } catch (e) {
       String errorMessage = 'Fotoğraf seçilirken hata oluştu';
@@ -63,11 +63,6 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
           SnackBarHelper.showSuccess(context, 'Profil fotoğrafı başarıyla yüklendi!');
           authCubit.getProfile(); // Refresh user profile
 
-          if (shouldPop) {
-            Navigation.ofPop();
-          } else {
-            Navigation.pushReplacementNamed(root: Routes.profile);
-          }
           return true;
         } else {
           print(authCubit.state.errorMessage);
