@@ -5,7 +5,6 @@ import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 class MovieCard extends StatelessWidget {
   final MovieModel movie;
@@ -18,15 +17,14 @@ class MovieCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
-      child: Container(
+      child: SizedBox(
         width: double.infinity,
-        height: 80.h, // Tam ekran yüksekliği
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
+        height: double.infinity,
         child: Stack(
           children: [
             // Background image - tam ekran
             ClipRRect(
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
               child: Image.network(
                 // movie.images.first,
                 movie.poster,
@@ -56,7 +54,10 @@ class MovieCard extends StatelessWidget {
             // Gradient overlay - bottom to top
             Container(
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(12),
+                  bottomRight: Radius.circular(12),
+                ),
                 gradient: LinearGradient(
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
@@ -113,9 +114,7 @@ class MovieCard extends StatelessWidget {
                       children: [
                         Text(
                           movie.title,
-                          style:
-                              AppTextStyles.headline3.copyWith(fontWeight: FontWeight.bold, color: AppColors.white) ??
-                              const TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.white),
+                          style: AppTextStyles.headline3.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

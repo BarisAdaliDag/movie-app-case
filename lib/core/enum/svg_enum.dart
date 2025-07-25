@@ -9,6 +9,7 @@ enum SvgEnum {
   gradientBottom('gradientBottom'),
   homeN('homeN'),
   addUser('addUser'),
+  gem('gem'),
 
   plus('plus');
 

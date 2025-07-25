@@ -59,7 +59,7 @@ class AppTextStyles {
   static const TextStyle bodySmall = TextStyle(
     fontSize: 12,
     fontWeight: FontWeight.normal,
-    color: AppColors.textSecondary,
+    color: AppColors.textPrimary,
     fontFamily: 'EuclidCircularA',
   );
 

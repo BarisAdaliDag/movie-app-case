@@ -49,6 +49,7 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
     // // If navigating from profile and success, pop with success indicator
     if (widget.showBackButton && mounted) {
       if (result == true) {
+        context.read<AuthCubit>().getProfile();
         Navigation.ofPop();
       }
     } else {
