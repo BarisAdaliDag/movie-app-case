@@ -9,13 +9,28 @@ import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_app_bar.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
-import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
+import 'package:movieapp/features/data/models/movie/movie_model.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
+import 'package:movieapp/features/presentation/profile/cubit/profile_cubit.dart';
+import 'package:movieapp/features/presentation/profile/cubit/profile_state.dart';
 import 'package:movieapp/features/presentation/profile/widget/limited_offer_badge.dart';
+import 'package:movieapp/features/presentation/profile/widget/movie_shimmer_card.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => getIt<ProfileCubit>()..loadFavoriteMovies(),
+      child: const _ProfilePageContent(),
+    );
+  }
+}
+
+class _ProfilePageContent extends StatelessWidget {
+  const _ProfilePageContent();
 
   void _logout(BuildContext context) {
     showDialog(
@@ -51,24 +66,18 @@ class ProfilePage extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
       appBar: CustomAppBar(title: "Profil Detayı", showBackButton: false, actions: [LimitedOfferBadge()]),
-      body: BlocConsumer<AuthCubit, AuthState>(
-        listener: (context, state) {
-          if (!state.isAuthenticated && !state.isLoading) {
-            Navigation.pushReplacementNamed(root: Routes.login);
-          }
-
-          if (state.errorMessage != null) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.errorMessage!), backgroundColor: AppColors.error));
-          }
-        },
-        builder: (context, state) {
-          if (state.isLoading) {
+      body: BlocBuilder<AuthCubit, AuthState>(
+        builder: (context, authState) {
+          if (authState.isLoading) {
             return const LoadingWidget(message: 'Loading profile...');
           }
 
-          if (state.user == null) {
+          if (!authState.isAuthenticated) {
+            Future.microtask(() => Navigation.pushReplacementNamed(root: Routes.login));
+            return Container();
+          }
+
+          if (authState.user == null) {
             return Center(
               child: Text(
                 'No user data available',
@@ -77,171 +86,198 @@ class ProfilePage extends StatelessWidget {
             );
           }
 
-          return SafeArea(
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Profile Header
-                  Row(
+          return BlocConsumer<ProfileCubit, ProfileState>(
+            listener: (context, profileState) {
+              if (profileState.hasError) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(profileState.error!), backgroundColor: AppColors.error));
+                context.read<ProfileCubit>().clearError();
+              }
+            },
+            builder: (context, profileState) {
+              return SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Avatar
-                      Container(
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          border: Border.all(color: AppColors.white20Opacity, width: 2),
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(30),
-                          child:
-                              state.user!.photoUrl != null && state.user!.photoUrl!.isNotEmpty
-                                  ? Image.network(
-                                    state.user!.photoUrl!,
-                                    fit: BoxFit.cover,
-                                    errorBuilder:
-                                        (context, error, stackTrace) => Container(
-                                          color: AppColors.surface,
-                                          child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
-                                        ),
-                                  )
-                                  : Container(
-                                    color: AppColors.surface,
-                                    child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
-                                  ),
-                        ),
-                      ),
-
-                      const SizedBox(width: 16),
-
-                      // User Info
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(state.user!.name, style: AppTextStyles.appBarStyle.copyWith(color: AppColors.white)),
-                            const SizedBox(height: 4),
-                            Text(
-                              'ID: ${state.user!.id}',
-                              style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
+                      // Profile Header
+                      Row(
+                        children: [
+                          // Avatar
+                          Container(
+                            width: 60,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(40),
+                              border: Border.all(color: AppColors.white20Opacity, width: 2),
                             ),
-                          ],
-                        ).onlyPadding(right: 10),
-                      ),
-
-                      // Photo Button
-                      GestureDetector(
-                        onTap: () => Navigation.push(page: PhotoUploadPage(user: state.user!)),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: AppColors.primaryColor,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            'Fotoğraf Ekle',
-                            style: AppTextStyles.bodySmall.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w600,
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child:
+                                  authState.user!.photoUrl != null && authState.user!.photoUrl!.isNotEmpty
+                                      ? Image.network(
+                                        authState.user!.photoUrl!,
+                                        fit: BoxFit.cover,
+                                        errorBuilder:
+                                            (context, error, stackTrace) => Container(
+                                              color: AppColors.surface,
+                                              child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
+                                            ),
+                                      )
+                                      : Container(
+                                        color: AppColors.surface,
+                                        child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
+                                      ),
                             ),
                           ),
+
+                          const SizedBox(width: 16),
+
+                          // User Info
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  authState.user!.name,
+                                  style: AppTextStyles.appBarStyle.copyWith(color: AppColors.white),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  'ID: ${authState.user!.id}',
+                                  style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
+                                ),
+                              ],
+                            ).onlyPadding(right: 10),
+                          ),
+
+                          // Photo Button
+                          GestureDetector(
+                            onTap: () => Navigation.push(page: PhotoUploadPage(user: authState.user!)),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Text(
+                                'Fotoğraf Ekle',
+                                style: AppTextStyles.bodySmall.copyWith(
+                                  color: AppColors.white,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 32),
+
+                      // Favorite Movies Section
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text('Beğendiğim Filmler', style: AppTextStyles.headline3.copyWith(color: AppColors.white)),
+                        ],
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      // Movies Grid
+                      if (profileState.isLoading)
+                        // Loading shimmer cards
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.6,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 16,
+                          ),
+                          itemCount: 4,
+                          itemBuilder: (context, index) => const MovieShimmerCard(),
+                        )
+                      else if (profileState.isEmpty)
+                        // Empty state
+                        Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Column(
+                              children: [
+                                Icon(Icons.favorite_border, size: 48, color: AppColors.textSecondary),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Henüz favori film eklememişsiniz',
+                                  style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ],
+                            ),
+                          ),
+                        )
+                      else
+                        // Actual movies grid
+                        GridView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.6,
+                            crossAxisSpacing: 12,
+                            mainAxisSpacing: 16,
+                          ),
+                          itemCount: profileState.favoriteMovies.length,
+                          itemBuilder: (context, index) {
+                            return _buildMovieCard(profileState.favoriteMovies[index], context);
+                          },
+                        ),
+
+                      const SizedBox(height: 32),
+
+                      // Logout Button
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () => _logout(context),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.error,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          child: Text('Çıkış Yap', style: AppTextStyles.buttonText.copyWith(color: AppColors.white)),
                         ),
                       ),
+
+                      const SizedBox(height: 24),
                     ],
                   ),
-
-                  const SizedBox(height: 32),
-
-                  // Favorite Movies Section
-                  Text('Beğendiğim Filmler', style: AppTextStyles.headline3.copyWith(color: AppColors.white)),
-
-                  const SizedBox(height: 16),
-
-                  // Movies Grid
-                  GridView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      childAspectRatio: 0.7,
-                      crossAxisSpacing: 12,
-                      mainAxisSpacing: 16,
-                    ),
-                    itemCount: 4, // Demo için 4 film
-                    itemBuilder: (context, index) {
-                      return _buildMovieCard(index);
-                    },
-                  ),
-
-                  const SizedBox(height: 32),
-
-                  // Logout Button
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: () => _logout(context),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.error,
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                      ),
-                      child: Text('Çıkış Yap', style: AppTextStyles.buttonText.copyWith(color: AppColors.white)),
-                    ),
-                  ),
-
-                  const SizedBox(height: 24),
-                ],
-              ),
-            ),
+                ),
+              );
+            },
           );
         },
       ),
     );
   }
 
-  Widget _buildMovieCard(int index) {
-    // Demo movie data - gerçek uygulamada favoriler listesinden gelecek
-    final movies = [
-      {
-        'title': 'Aşk, Ekmek, Hayaller',
-        'subtitle': 'Adam Yapım',
-        'image': 'https://via.placeholder.com/200x300/4A5568/FFFFFF?text=Movie+${index + 1}',
-      },
-      {
-        'title': 'Gece Karanlık',
-        'subtitle': 'Fox Studios',
-        'image': 'https://via.placeholder.com/200x300/2D3748/FFFFFF?text=Movie+${index + 1}',
-      },
-      {
-        'title': 'Aşk, Ekmek, Hayaller',
-        'subtitle': 'Adam Yapım',
-        'image': 'https://via.placeholder.com/200x300/4A5568/FFFFFF?text=Movie+${index + 1}',
-      },
-      {
-        'title': 'Gece Karanlık',
-        'subtitle': 'Fox Studios',
-        'image': 'https://via.placeholder.com/200x300/2D3748/FFFFFF?text=Movie+${index + 1}',
-      },
-    ];
-
-    final movie = movies[index % movies.length];
-
+  Widget _buildMovieCard(MovieModel movie, BuildContext context) {
     return Container(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12), color: AppColors.surface),
+      decoration: BoxDecoration(borderRadius: BorderRadius.circular(12)),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Movie Image
           Expanded(
             child: ClipRRect(
-              borderRadius: const BorderRadius.only(topLeft: Radius.circular(12), topRight: Radius.circular(12)),
-              child: Container(
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              child: SizedBox(
                 width: double.infinity,
-                color: AppColors.cardBackground,
                 child: Image.network(
-                  movie['image']!,
+                  movie.images.first,
                   fit: BoxFit.cover,
                   errorBuilder:
                       (context, error, stackTrace) => Container(
@@ -255,19 +291,20 @@ class ProfilePage extends StatelessWidget {
 
           // Movie Info
           Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.symmetric(vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  movie['title']!,
-                  style: AppTextStyles.bodyRegular.copyWith(color: AppColors.white, fontWeight: FontWeight.w600),
-                  maxLines: 2,
+                  movie.title,
+                  style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
+                  maxLines: 1,
+
                   overflow: TextOverflow.ellipsis,
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  movie['subtitle']!,
+                  movie.genre,
                   style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,

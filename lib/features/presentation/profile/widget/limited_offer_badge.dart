@@ -32,7 +32,7 @@ class LimitedOfferBadge extends StatelessWidget {
 
               // İkon ile metin arası boşluk
               // Metin
-              Text('Sınırlı Teklif', style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.bold)),
+              Text('Sınırlı Teklif', style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w500)),
             ],
           ),
         ),
