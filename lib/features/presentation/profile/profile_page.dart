@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
@@ -117,11 +118,16 @@ class _ProfilePageContent extends StatelessWidget {
                               borderRadius: BorderRadius.circular(30),
                               child:
                                   authState.user!.photoUrl != null && authState.user!.photoUrl!.isNotEmpty
-                                      ? Image.network(
-                                        authState.user!.photoUrl!,
+                                      ? CachedNetworkImage(
+                                        imageUrl: authState.user!.photoUrl!,
                                         fit: BoxFit.cover,
-                                        errorBuilder:
-                                            (context, error, stackTrace) => Container(
+                                        placeholder:
+                                            (context, url) => Container(
+                                              color: AppColors.surface,
+                                              child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
+                                            ),
+                                        errorWidget:
+                                            (context, url, error) => Container(
                                               color: AppColors.surface,
                                               child: Icon(Icons.person, size: 40, color: AppColors.textSecondary),
                                             ),
@@ -276,11 +282,16 @@ class _ProfilePageContent extends StatelessWidget {
               borderRadius: const BorderRadius.all(Radius.circular(12)),
               child: SizedBox(
                 width: double.infinity,
-                child: Image.network(
-                  movie.images.first,
+                child: CachedNetworkImage(
+                  imageUrl: movie.images.first,
                   fit: BoxFit.cover,
-                  errorBuilder:
-                      (context, error, stackTrace) => Container(
+                  placeholder:
+                      (context, url) => Container(
+                        color: AppColors.cardBackground,
+                        child: Icon(Icons.movie, size: 40, color: AppColors.textSecondary),
+                      ),
+                  errorWidget:
+                      (context, url, error) => Container(
                         color: AppColors.cardBackground,
                         child: Icon(Icons.movie, size: 40, color: AppColors.textSecondary),
                       ),

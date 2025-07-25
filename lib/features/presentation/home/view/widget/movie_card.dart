@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
@@ -25,29 +26,26 @@ class MovieCard extends StatelessWidget {
             // Background image - tam ekran
             ClipRRect(
               borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(12), bottomRight: Radius.circular(12)),
-              child: Image.network(
+              child: CachedNetworkImage(
                 // movie.images.first,
-                movie.poster,
+                imageUrl: movie.images.first,
                 height: double.infinity,
                 width: double.infinity,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) {
-                  return Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    color: Colors.grey[800],
-                    child: const Icon(Icons.movie, size: 64, color: Colors.grey),
-                  );
-                },
-                loadingBuilder: (context, child, loadingProgress) {
-                  if (loadingProgress == null) return child;
-                  return Container(
-                    height: double.infinity,
-                    width: double.infinity,
-                    color: Colors.grey[800],
-                    child: const Center(child: CircularProgressIndicator(color: Colors.red)),
-                  );
-                },
+                placeholder:
+                    (context, url) => Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.grey[800],
+                      child: const Center(child: CircularProgressIndicator(color: Colors.red)),
+                    ),
+                errorWidget:
+                    (context, url, error) => Container(
+                      height: double.infinity,
+                      width: double.infinity,
+                      color: Colors.grey[800],
+                      child: const Icon(Icons.movie, size: 64, color: Colors.grey),
+                    ),
               ),
             ),
 
