@@ -4,7 +4,7 @@ import 'package:movieapp/features/presentation/login/view/login_page.dart';
 import 'package:movieapp/features/presentation/register/view/register_page.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/photo_upload_page.dart';
-import 'package:movieapp/features/presentation/main/main_page.dart';
+import 'package:movieapp/features/presentation/main_tabbar/main_tabbar_page.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 
 final class Routes {
@@ -26,8 +26,7 @@ final class Routes {
       case register:
         return _materialPageRoute(const RegisterPage());
       case main:
-        final mainArgs = routeSettings.arguments as Map<String, dynamic>?;
-        return _materialPageRoute(MainPage());
+        return _materialPageRoute(MainTabbarPage());
       case profile:
         return _materialPageRoute(const ProfilePage());
       case photoUpload:

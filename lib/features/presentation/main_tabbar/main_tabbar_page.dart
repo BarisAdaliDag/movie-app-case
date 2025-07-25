@@ -5,18 +5,18 @@ import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/home/view/home_page.dart';
-import 'package:movieapp/features/presentation/main/widget/custom_button_navigation.dart';
+import 'package:movieapp/features/presentation/main_tabbar/widget/custom_button_navigation.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 
-class MainPage extends StatefulWidget {
-  const MainPage({super.key, this.initialIndex = 0});
+class MainTabbarPage extends StatefulWidget {
+  const MainTabbarPage({super.key, this.initialIndex = 0});
   final int initialIndex;
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  State<MainTabbarPage> createState() => _MainTabbarPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainTabbarPageState extends State<MainTabbarPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 

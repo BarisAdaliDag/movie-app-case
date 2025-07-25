@@ -7,7 +7,7 @@ import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
-import 'package:movieapp/features/presentation/main/main_page.dart';
+import 'package:movieapp/features/presentation/main_tabbar/main_tabbar_page.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_cubit.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_state.dart';
 import 'package:movieapp/features/presentation/photo_upload/view/widget/common_widgets.dart';
@@ -53,7 +53,7 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
         Navigation.ofPop();
       }
     } else {
-      Navigation.pushAndRemoveAll(page: MainPage(initialIndex: 1));
+      Navigation.pushAndRemoveAll(page: MainTabbarPage(initialIndex: 1));
     }
   }
 
