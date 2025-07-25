@@ -12,7 +12,7 @@ class AppColors {
   static const Color textPrimary = Color(0xFFFFFFFF);
   static const Color textSecondary = Color(0x80FFFFFF);
   static const Color grey = Colors.grey;
-  static const Color white = Colors.white;
+  static const Color white = Color(0xFFFFFFFF);
   static const Color whiteLittleGrey = Color.fromRGBO(255, 255, 255, 1);
   static const Color white20Opacity = Color.fromRGBO(255, 255, 255, 0.20);
 

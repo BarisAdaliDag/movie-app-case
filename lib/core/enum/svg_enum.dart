@@ -7,6 +7,7 @@ enum SvgEnum {
   apple('apple'),
   facebook('facebook'),
   gradientBottom('gradientBottom'),
+  homeN('homeN'),
   addUser('addUser'),
 
   plus('plus');

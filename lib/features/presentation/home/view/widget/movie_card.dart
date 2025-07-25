@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/enum/svg_enum.dart';
+import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
+import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -102,17 +105,7 @@ class MovieCard extends StatelessWidget {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    width: 40,
-                    height: 40,
-                    decoration: BoxDecoration(color: Colors.red, shape: BoxShape.circle),
-                    child: const Center(
-                      child: Text(
-                        'N',
-                        style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
+                  SvgWidget(svgPath: SvgEnum.homeN.svgPath, width: 40, height: 40).onlyPadding(top: 8),
                   const SizedBox(width: 12), // Yatay boşluk
                   Expanded(
                     child: Column(
@@ -126,12 +119,77 @@ class MovieCard extends StatelessWidget {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),
-                        const SizedBox(height: 8),
-                        Text(
-                          movie.plot,
-                          style: AppTextStyles.bodyLarge.copyWith(color: Colors.white70),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
+                        // const SizedBox(height: 4),
+                        LayoutBuilder(
+                          builder: (context, constraints) {
+                            final baseStyle = AppTextStyles.bodyRegular.copyWith(color: Colors.white70);
+                            final readMoreStyle = AppTextStyles.bodyRegular.copyWith(
+                              color: AppColors.primaryColor,
+                              fontWeight: FontWeight.bold,
+                            );
+
+                            // Test metni ile kaç karakter sığdığını hesapla
+                            final testSpan = TextSpan(text: movie.plot, style: baseStyle);
+                            final testPainter = TextPainter(
+                              text: testSpan,
+                              textDirection: TextDirection.ltr,
+                              maxLines: 2,
+                            );
+                            testPainter.layout(maxWidth: constraints.maxWidth);
+
+                            if (testPainter.didExceedMaxLines) {
+                              // Metin 2 satıra sığmıyor, kısaltıp "Daha Fazlası" ekle
+
+                              // "Daha Fazlası" için yer hesapla
+                              final readMorePainter = TextPainter(
+                                text: TextSpan(text: " Daha Fazlası", style: readMoreStyle),
+                                textDirection: TextDirection.ltr,
+                              );
+                              readMorePainter.layout();
+
+                              // İkinci satır için kullanılabilir genişlik
+                              final availableWidth = constraints.maxWidth - readMorePainter.width;
+
+                              // Kısaltılmış metni hesapla
+                              String truncatedText = movie.plot;
+                              TextPainter painter;
+
+                              do {
+                                truncatedText = truncatedText.substring(0, truncatedText.length - 1);
+                                painter = TextPainter(
+                                  text: TextSpan(text: truncatedText, style: baseStyle),
+                                  textDirection: TextDirection.ltr,
+                                  maxLines: 2,
+                                );
+                                painter.layout(maxWidth: availableWidth);
+                              } while (painter.didExceedMaxLines && truncatedText.isNotEmpty);
+
+                              // Son kelimeyi tam tut
+                              final words = truncatedText.split(' ');
+                              if (words.length > 1) {
+                                words.removeLast();
+                                truncatedText = words.join(' ');
+                              }
+
+                              return RichText(
+                                text: TextSpan(
+                                  style: baseStyle,
+                                  children: [
+                                    TextSpan(text: truncatedText),
+                                    TextSpan(
+                                      text: " ...Daha Fazlası",
+                                      style: readMoreStyle.copyWith(color: AppColors.white),
+                                    ),
+                                  ],
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              );
+                            } else {
+                              // Metin 2 satıra sığıyor, normal göster
+                              return Text(movie.plot, style: baseStyle, maxLines: 2, overflow: TextOverflow.ellipsis);
+                            }
+                          },
                         ),
                       ],
                     ),
