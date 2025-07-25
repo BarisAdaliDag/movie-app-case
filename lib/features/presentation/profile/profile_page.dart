@@ -273,7 +273,7 @@ class _ProfilePageContent extends StatelessWidget {
           // Movie Image
           Expanded(
             child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(1)),
+              borderRadius: const BorderRadius.all(Radius.circular(12)),
               child: SizedBox(
                 width: double.infinity,
                 child: Image.network(
