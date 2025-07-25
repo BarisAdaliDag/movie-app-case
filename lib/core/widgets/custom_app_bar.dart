@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.onBackPressed,
     this.showBackButton = true,
     this.actions,
-    this.backgroundColor = Colors.transparent,
+    this.backgroundColor = AppColors.scaffoldBackground,
     this.foregroundColor = AppColors.white,
   });
 

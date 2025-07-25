@@ -9,6 +9,7 @@ class AppTheme {
       brightness: Brightness.dark,
       primaryColor: AppColors.primaryColor,
       scaffoldBackgroundColor: AppColors.scaffoldBackground,
+      fontFamily: 'EuclidCircularA', // Global font family
       appBarTheme: const AppBarTheme(
         backgroundColor: AppColors.primaryColor,
         elevation: 0,

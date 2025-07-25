@@ -164,10 +164,7 @@ class _ProfilePageContent extends StatelessWidget {
                               ),
                               child: Text(
                                 'Fotoğraf Ekle',
-                                style: AppTextStyles.bodySmall.copyWith(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w700),
                               ),
                             ),
                           ),
@@ -180,7 +177,10 @@ class _ProfilePageContent extends StatelessWidget {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Beğendiğim Filmler', style: AppTextStyles.headline3.copyWith(color: AppColors.white)),
+                          Text(
+                            'Beğendiğim Filmler',
+                            style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w700),
+                          ),
                         ],
                       ),
 
@@ -226,7 +226,7 @@ class _ProfilePageContent extends StatelessWidget {
                           physics: const NeverScrollableScrollPhysics(),
                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                             crossAxisCount: 2,
-                            childAspectRatio: 0.6,
+                            childAspectRatio: 0.55,
                             crossAxisSpacing: 12,
                             mainAxisSpacing: 16,
                           ),
@@ -273,7 +273,7 @@ class _ProfilePageContent extends StatelessWidget {
           // Movie Image
           Expanded(
             child: ClipRRect(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
+              borderRadius: const BorderRadius.all(Radius.circular(1)),
               child: SizedBox(
                 width: double.infinity,
                 child: Image.network(
@@ -298,7 +298,7 @@ class _ProfilePageContent extends StatelessWidget {
                 Text(
                   movie.title,
                   style: AppTextStyles.bodyMedium.copyWith(color: AppColors.white, fontWeight: FontWeight.w500),
-                  maxLines: 1,
+                  maxLines: 2,
 
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -306,9 +306,12 @@ class _ProfilePageContent extends StatelessWidget {
                 Text(
                   movie.genre,
                   style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
-                  maxLines: 1,
+                  maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
+                // Extra spacing to maintain consistent card height
+                if (movie.title.length < 25) // Approximate check for single line
+                  const SizedBox(height: 18),
               ],
             ),
           ),
