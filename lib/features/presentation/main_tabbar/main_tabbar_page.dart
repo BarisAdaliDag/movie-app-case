@@ -20,7 +20,7 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 
-  final List<Widget> _pages = [const HomePage(loadPage: false), const ProfilePage()];
+  final List<Widget> _pages = [const HomePage(loadPage: true), const ProfilePage()];
 
   @override
   void initState() {
