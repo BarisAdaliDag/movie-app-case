@@ -22,6 +22,18 @@ class AppTextStyles {
     color: AppColors.textPrimary,
     fontFamily: 'EuclidCircularA',
   );
+  static const TextStyle appBarStyle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    fontFamily: 'EuclidCircularA',
+  );
+  static const TextStyle bottomTabBarStyle = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    fontFamily: 'EuclidCircularA',
+  );
 
   static const TextStyle bodyRegular = TextStyle(
     fontSize: 14,

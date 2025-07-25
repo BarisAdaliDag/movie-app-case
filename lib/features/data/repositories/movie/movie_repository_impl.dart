@@ -1,5 +1,6 @@
 import 'package:movieapp/features/data/datasources/movie/movie_remote_data_source.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
+import 'package:movieapp/features/data/models/movie/movies_with_pagination_model.dart';
 import 'package:movieapp/features/data/repositories/movie/movie_repository.dart';
 
 class MovieRepositoryImpl implements MovieRepository {
@@ -8,7 +9,7 @@ class MovieRepositoryImpl implements MovieRepository {
   MovieRepositoryImpl({required this.remoteDatasource});
 
   @override
-  Future<List<MovieModel>> getMovies({required String token, int page = 1}) {
+  Future<MoviesWithPaginationModel> getMovies({required String token, int page = 1}) {
     return remoteDatasource.getMovies(token: token, page: page);
   }
 

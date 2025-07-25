@@ -4,7 +4,8 @@ import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
-import 'package:movieapp/features/presentation/home/home_page.dart';
+import 'package:movieapp/features/presentation/home/view/home_page.dart';
+import 'package:movieapp/features/presentation/main/widget/custom_button_navigation.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 
 class MainPage extends StatefulWidget {
@@ -19,7 +20,7 @@ class _MainPageState extends State<MainPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 
-  final List<Widget> _pages = [const HomePage(), const ProfilePage()];
+  final List<Widget> _pages = [const HomePage(loadPage: false), const ProfilePage()];
 
   @override
   void initState() {
@@ -49,43 +50,18 @@ class _MainPageState extends State<MainPage> {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         // If user logs out, this will be handled by the main routing logic
-        // The MainPage will be replaced by LoginPage through the main routes
       },
-      child: Scaffold(
-        backgroundColor: AppColors.scaffoldBackground,
-
-        body: PageView(controller: _pageController, onPageChanged: _onPageChanged, children: _pages),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: AppColors.cardBackground,
-            boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 10, offset: const Offset(0, -2))],
-          ),
-          child: BottomNavigationBar(
-            currentIndex: _currentIndex,
-            onTap: _onTabTapped,
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            type: BottomNavigationBarType.fixed,
-            selectedItemColor: AppColors.primaryColor,
-            unselectedItemColor: AppColors.textSecondary,
-            selectedLabelStyle: AppTextStyles.bodySmall.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.primaryColor,
-            ),
-            unselectedLabelStyle: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
-            items: const [
-              BottomNavigationBarItem(
-                icon: Icon(Icons.home_outlined),
-                activeIcon: Icon(Icons.home),
-                label: 'Ana Sayfa',
-              ),
-              BottomNavigationBarItem(
-                icon: Icon(Icons.person_outline),
-                activeIcon: Icon(Icons.person),
-                label: 'Profil',
-              ),
+      child: SafeArea(
+        bottom: false,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Column(
+            children: [
+              Expanded(child: PageView(controller: _pageController, onPageChanged: _onPageChanged, children: _pages)),
+              CustomBottomNavigation(currentIndex: _currentIndex, onTap: _onTabTapped),
             ],
           ),
+          // bottomNavigationBar: CustomBottomNavigation(currentIndex: _currentIndex, onTap: _onTabTapped),
         ),
       ),
     );

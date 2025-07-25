@@ -3,6 +3,8 @@ import 'package:movieapp/core/constants/api_constants.dart';
 import 'package:movieapp/core/network/network_client.dart';
 import 'package:movieapp/features/data/datasources/movie/movie_datasource.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
+import 'package:movieapp/features/data/models/movie/movies_response_model.dart';
+import 'package:movieapp/features/data/models/movie/movies_with_pagination_model.dart';
 
 class MovieRemoteDatasource implements MovieDatasource {
   final NetworkClient networkClient;
@@ -10,15 +12,16 @@ class MovieRemoteDatasource implements MovieDatasource {
   MovieRemoteDatasource({required this.networkClient});
 
   @override
-  Future<List<MovieModel>> getMovies({required String token, int page = 1}) async {
+  Future<MoviesWithPaginationModel> getMovies({required String token, int page = 1}) async {
     final response = await networkClient.get(
       endpoint: '${ApiConstants.movieList}?page=$page',
       headers: {ApiConstants.authorization: token, 'accept': 'application/json'},
     );
     debugPrint(response.toString());
-    final moviesJson = response['data']['movies'] as List;
-    debugPrint(moviesJson.toString());
-    return moviesJson.map((e) => MovieModel.fromJson(e)).toList();
+
+    final moviesResponseData = MoviesResponseModel.fromJson(response['data']);
+
+    return MoviesWithPaginationModel(movies: moviesResponseData.movies, pagination: moviesResponseData.pagination);
   }
 
   @override

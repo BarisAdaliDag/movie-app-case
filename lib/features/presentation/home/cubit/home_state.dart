@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
+import 'package:movieapp/features/data/models/movie/pagination_model.dart';
 
 class HomeState extends Equatable {
   final List<MovieModel> movies;
@@ -10,6 +11,9 @@ class HomeState extends Equatable {
   final bool isRefreshing;
   final String? error;
   final bool isInitial;
+  final PaginationModel? pagination;
+  final List<int> randomPageNumbers; // Rastgele sayfa numaraları listesi
+  final int currentPageIndex; // randomPageNumbers listesindeki mevcut index
 
   const HomeState({
     this.movies = const [],
@@ -20,6 +24,9 @@ class HomeState extends Equatable {
     this.isRefreshing = false,
     this.error,
     this.isInitial = true,
+    this.pagination,
+    this.randomPageNumbers = const [],
+    this.currentPageIndex = 0,
   });
 
   HomeState copyWith({
@@ -31,6 +38,9 @@ class HomeState extends Equatable {
     bool? isRefreshing,
     String? error,
     bool? isInitial,
+    PaginationModel? pagination,
+    List<int>? randomPageNumbers,
+    int? currentPageIndex,
   }) {
     return HomeState(
       movies: movies ?? this.movies,
@@ -41,6 +51,9 @@ class HomeState extends Equatable {
       isRefreshing: isRefreshing ?? this.isRefreshing,
       error: error,
       isInitial: isInitial ?? this.isInitial,
+      pagination: pagination ?? this.pagination,
+      randomPageNumbers: randomPageNumbers ?? this.randomPageNumbers,
+      currentPageIndex: currentPageIndex ?? this.currentPageIndex,
     );
   }
 
@@ -48,7 +61,12 @@ class HomeState extends Equatable {
   bool get hasError => error != null;
   bool get hasMovies => movies.isNotEmpty;
   bool get isEmpty => movies.isEmpty && !isLoading && !isInitial;
-  bool get canLoadMore => !isLoadingMore && !hasReachedMax && !isLoading;
+  bool get canLoadMore =>
+      !isLoadingMore &&
+      !hasReachedMax &&
+      !isLoading &&
+      randomPageNumbers.isNotEmpty &&
+      currentPageIndex < randomPageNumbers.length - 1;
 
   @override
   List<Object?> get props => [
@@ -60,5 +78,8 @@ class HomeState extends Equatable {
     isRefreshing,
     error,
     isInitial,
+    pagination,
+    randomPageNumbers,
+    currentPageIndex,
   ];
 }
