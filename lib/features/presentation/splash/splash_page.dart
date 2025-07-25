@@ -5,6 +5,7 @@ import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
+import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 
 class SplashPage extends StatelessWidget {
   const SplashPage({super.key});
@@ -15,8 +16,9 @@ class SplashPage extends StatelessWidget {
       body: BlocListener<AuthCubit, AuthState>(
         listener: (context, state) async {
           if (!state.isLoading) {
-            await Future.delayed(const Duration(seconds: 2));
             if (state.isAuthenticated && state.user != null) {
+              context.read<HomeCubit>().loadMovies();
+              await Future.delayed(const Duration(seconds: 2));
               Navigation.pushReplacementNamed(root: Routes.main);
             } else {
               Navigation.pushReplacementNamed(root: Routes.login);

@@ -17,10 +17,9 @@ class AuthCubit extends Cubit<AuthState> {
 
     final result = await authRepository.getProfile();
 
-    result.fold(
-      (failure) => emit(state.copyWith(isLoading: false)),
-      (user) => emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true)),
-    );
+    result.fold((failure) => emit(state.copyWith(isLoading: false)), (user) {
+      emit(state.copyWith(isLoading: false, user: user, isAuthenticated: true));
+    });
   }
 
   Future<void> getProfile() async {

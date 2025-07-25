@@ -26,10 +26,6 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _pageController.addListener(_onPageChanged);
-    if (widget.loadPage == true) {
-      // Eğer loadPage true ise, sayfa yüklendiğinde filmleri yükle
-      context.read<HomeCubit>().loadMovies();
-    }
   }
 
   @override
