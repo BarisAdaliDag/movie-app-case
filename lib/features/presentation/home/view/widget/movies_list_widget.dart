@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_state.dart';
-import 'package:movieapp/features/presentation/home/view/widget/movie_card.dart';
+import 'package:movieapp/features/presentation/home/view/widget/home_movie_card.dart';
 
 class MoviesListWidget extends StatelessWidget {
   final PageController pageController;
@@ -29,7 +29,10 @@ class MoviesListWidget extends StatelessWidget {
           final movie = state.movies[index];
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 16),
-            child: MovieCard(movie: movie, onFavoriteToggle: () => context.read<HomeCubit>().toggleFavorite(movie.id)),
+            child: HomeMovieCard(
+              movie: movie,
+              onFavoriteToggle: () => context.read<HomeCubit>().toggleFavorite(movie.id),
+            ),
           );
         },
       ),

@@ -7,12 +7,12 @@ import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
 
-class MovieCard extends StatelessWidget {
+class HomeMovieCard extends StatelessWidget {
   final MovieModel movie;
   final VoidCallback? onFavoriteToggle;
   final VoidCallback? onTap;
 
-  const MovieCard({super.key, required this.movie, this.onFavoriteToggle, this.onTap});
+  const HomeMovieCard({super.key, required this.movie, this.onFavoriteToggle, this.onTap});
 
   @override
   Widget build(BuildContext context) {
