@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
@@ -51,7 +52,7 @@ class _ProfilePageContent extends StatelessWidget {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
       appBar: CustomAppBar(
-        title: "Profil Detayı",
+        title: AppConstants.profileDetails,
         showBackButton: false,
         actions: [
           LimitedOfferBadge(
@@ -64,16 +65,11 @@ class _ProfilePageContent extends StatelessWidget {
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
           if (authState.isLoading) {
-            return const LoadingWidget(message: 'Loading profile...');
+            return const LoadingWidget(message: AppConstants.loading);
           }
 
           if (authState.user == null) {
-            return Center(
-              child: Text(
-                'No user data available',
-                style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
-              ),
-            );
+            return const Center(child: Text('Kullanıcı bilgileri yüklenemedi'));
           }
 
           return BlocConsumer<ProfileCubit, ProfileState>(
@@ -86,6 +82,11 @@ class _ProfilePageContent extends StatelessWidget {
               }
             },
             builder: (context, profileState) {
+              final user = authState.user;
+              if (user == null) {
+                return const Center(child: Text('Kullanıcı bilgileri yüklenemedi'));
+              }
+
               return SafeArea(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -96,7 +97,7 @@ class _ProfilePageContent extends StatelessWidget {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          ProfileHeaderWidget(user: authState.user!),
+                          ProfileHeaderWidget(user: user),
                           const SizedBox(height: 32),
 
                           // Favorite Movies Section

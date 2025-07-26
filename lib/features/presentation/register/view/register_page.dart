@@ -64,16 +64,13 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // Header
-                  const AuthHeader(
-                    title: 'Hoşgeldiniz',
-                    subtitle: 'Tempus varius a vitae interdum id tortor elementum tristique eleifend at.',
-                  ),
+                  const AuthHeader(title: AppConstants.welcome, subtitle: AppConstants.welcomeSubtitle),
 
                   const SizedBox(height: 40),
 
                   // Name Field
                   CustomTextField(
-                    hint: 'Ad Soyad',
+                    hint: AppConstants.fullName,
                     controller: formCubit.nameController,
                     keyboardType: TextInputType.name,
                     validator: formCubit.validateName,

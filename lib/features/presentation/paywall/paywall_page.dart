@@ -44,7 +44,7 @@ class _PaywallPageContent extends StatelessWidget {
                   const SizedBox(height: 4),
 
                   Text(
-                    'Jeton paketin’ni seçerek bonus \nkazanın ve yeni bölümlerin kilidini açın!',
+                    AppConstants.jetonPaketiAciklama,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.bodyRegular.copyWith(),
                   ),
@@ -108,6 +108,3 @@ class _PaywallPageContent extends StatelessWidget {
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-// import 'dart:ui';

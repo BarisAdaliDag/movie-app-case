@@ -37,6 +37,8 @@ class AppConstants {
   static const String alreadyHaveAccount = 'Zaten bir hesabın var mı? ';
   static const String registerLink = 'Kayıt Ol!';
   static const String loginLink = 'Giriş Yap!';
+  static const String nameMinLength = 'Ad en az 2 karakter olmalıdır';
+  static const String tryAgain = 'Tekrar Dene';
 
   // Terms & Conditions
   static const String termsText1 = 'Kullanıcı sözleşmesini ';
@@ -46,6 +48,9 @@ class AppConstants {
   // Navigation
   static const String home = 'Anasayfa';
   static const String profile = 'Profil';
+  static const String logout = 'Çıkış Yap';
+  static const String cancel = 'İptal';
+  static const String logoutConfirmation = 'Çıkış yapmak istediğinize emin misiniz?';
 
   // Paywall
   static const String limitedOffer = 'Sınırlı Teklif';
@@ -58,12 +63,18 @@ class AppConstants {
   static const String moreLikes = 'Daha\nFazla Beğeni';
   static const String tokens = 'Jeton';
   static const String weekly = 'Başına haftalık';
+  static const String jetonPaketiAciklama =
+      'Jeton paketin’ni seçerek bonus \nkazanın ve yeni bölümlerin kilidini açın!';
 
   // Profile
   static const String addPhoto = 'Fotoğraf Ekle';
   static const String userId = 'ID: ';
+  static const String profileDetails = 'Profil Detayı';
+  static const String noFavoriteMovies = 'Henüz favori film eklememişsiniz';
+  static const String likedMovies = 'Beğendiğim Filmler';
 
   // General
+
   static const String loading = 'Yükleniyor...';
   static const String readMore = ' ...Daha Fazlası';
 
@@ -73,4 +84,12 @@ class AppConstants {
   static const String strong = 'Güçlü';
   static const String veryStrong = 'Çok Güçlü'; // Validation
   static const int minPasswordLength = 6;
+
+  //Photo Upload
+  static const String photoUploadTitle = 'Fotoğraflarınızı Yükleyin';
+  static const String photoUploadSubtitle = 'Resources out incentivize \nrelaxation floor loss cc.';
+  static const String continueButton = 'Devam Et';
+
+  //Home
+  static const String noMoviesFound = 'Henüz film bulunamadı';
 }

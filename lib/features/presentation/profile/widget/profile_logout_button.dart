@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_logout_dialog.dart';
@@ -17,7 +18,7 @@ class ProfileLogoutButton extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),
-        child: Text('Çıkış Yap', style: AppTextStyles.buttonText.copyWith(color: AppColors.white)),
+        child: Text(AppConstants.logout, style: AppTextStyles.buttonText.copyWith(color: AppColors.white)),
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
@@ -20,7 +21,9 @@ class ProfileMoviesGridWidget extends StatelessWidget {
         // Section Title
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [Text('Beğendiğim Filmler', style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w700))],
+          children: [
+            Text(AppConstants.likedMovies, style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w700)),
+          ],
         ),
 
         const SizedBox(height: 16),
@@ -62,7 +65,7 @@ class ProfileMoviesGridWidget extends StatelessWidget {
             Icon(Icons.favorite_border, size: 48, color: AppColors.textSecondary),
             const SizedBox(height: 16),
             Text(
-              'Henüz favori film eklememişsiniz',
+              AppConstants.noFavoriteMovies,
               style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
               textAlign: TextAlign.center,
             ),

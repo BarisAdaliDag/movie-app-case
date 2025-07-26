@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 
 class HomeErrorWidget extends StatelessWidget {
@@ -16,13 +17,16 @@ class HomeErrorWidget extends StatelessWidget {
           const Icon(Icons.error_outline, size: 64, color: Colors.red),
           const SizedBox(height: 16),
           const Text(
-            'Bir hata oluştu',
+            AppConstants.serverError,
             style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Text(error, style: const TextStyle(color: Colors.grey), textAlign: TextAlign.center),
           const SizedBox(height: 16),
-          ElevatedButton(onPressed: () => context.read<HomeCubit>().loadMovies(), child: const Text('Tekrar Dene')),
+          ElevatedButton(
+            onPressed: () => context.read<HomeCubit>().loadMovies(),
+            child: const Text(AppConstants.tryAgain),
+          ),
         ],
       ),
     );

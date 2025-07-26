@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 
 class LoadingMoreIndicator extends StatelessWidget {
   const LoadingMoreIndicator({super.key});
@@ -18,7 +19,7 @@ class LoadingMoreIndicator extends StatelessWidget {
             children: [
               SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.red, strokeWidth: 2)),
               SizedBox(width: 8),
-              Text('Yükleniyor...', style: TextStyle(color: Colors.white, fontSize: 12)),
+              Text(AppConstants.loading, style: TextStyle(color: Colors.white, fontSize: 12)),
             ],
           ),
         ),

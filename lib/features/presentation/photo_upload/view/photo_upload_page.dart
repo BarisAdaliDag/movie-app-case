@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/getIt/get_It.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/routes/routes.dart';
@@ -61,7 +62,7 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
   Widget build(BuildContext context) {
     Widget scaffold = Scaffold(
       appBar: CustomAppBar(
-        title: 'Profil Detayı',
+        title: AppConstants.profileDetails,
         showBackButton: widget.showBackButton,
         onBackPressed:
             widget.showBackButton
@@ -102,8 +103,8 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
                         // Header
                         Center(
                           child: const PageHeader(
-                            title: 'Fotoğraflarınızı Yükleyin',
-                            subtitle: 'Resources out incentivize \nrelaxation floor loss cc.',
+                            title: AppConstants.photoUploadTitle,
+                            subtitle: AppConstants.photoUploadSubtitle,
                           ),
                         ),
 
@@ -125,7 +126,7 @@ class _PhotoUploadPageViewState extends State<_PhotoUploadPageView> {
 
                         // Continue Button
                         CustomButton(
-                          text: 'Devam Et',
+                          text: AppConstants.continueButton,
                           onPressed: (authState.isLoading || formState.uploading) ? null : () => _handleContinue(),
                           isLoading: authState.isLoading || formState.uploading,
                         ),

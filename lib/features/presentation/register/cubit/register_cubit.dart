@@ -26,7 +26,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
       return AppConstants.nameRequired;
     }
     if (value.length < 2) {
-      return 'Name must be at least 2 characters';
+      return AppConstants.nameMinLength;
     }
     return null;
   }
