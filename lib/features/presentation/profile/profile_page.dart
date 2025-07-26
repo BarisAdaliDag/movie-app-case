@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_app_bar.dart';
+import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
-import 'package:movieapp/features/presentation/paywall/custom_bottom_sheet.dart';
-import 'package:movieapp/features/presentation/paywall/paywall.dart';
+import 'package:movieapp/features/presentation/paywall/widget/custom_bottom_sheet.dart';
+import 'package:movieapp/features/presentation/paywall/paywall_page.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_cubit.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_state.dart';
 import 'package:movieapp/features/presentation/profile/widget/limited_offer_badge.dart';
@@ -41,7 +43,7 @@ class _ProfilePageContent extends StatelessWidget {
     //   barrierColor: Colors.black.withValues(alpha: 0.7),
     //   builder: (context) => const LimitedOfferPopup(),
     // );
-    showCustomBottomSheet(context: context, child: SizedBox(height: 70.h, width: 100.w));
+    showCustomBottomSheet(context: context, child: PaywallPage());
   }
 
   @override
@@ -136,7 +138,10 @@ void showCustomBottomSheet({
     builder:
         (context) => Padding(
           padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 100),
-          child: CustomBottomSheet(child: child),
+          child: ClipRRect(
+            borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+            child: CustomBottomSheet(child: child),
+          ),
         ),
   );
 }

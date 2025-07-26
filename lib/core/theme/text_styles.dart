@@ -41,6 +41,12 @@ class AppTextStyles {
     color: AppColors.textPrimary,
     fontFamily: 'EuclidCircularA',
   );
+  static const TextStyle body15MediumCircular = TextStyle(
+    fontSize: 15,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textPrimary,
+    fontFamily: 'EuclidCircularA',
+  );
 
   static const TextStyle bodyLarge = TextStyle(
     fontSize: 16,

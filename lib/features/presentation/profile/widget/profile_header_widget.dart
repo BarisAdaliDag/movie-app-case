@@ -68,7 +68,7 @@ class ProfileHeaderWidget extends StatelessWidget {
           onTap: () => Navigation.push(page: PhotoUploadPage(user: user)),
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(20)),
+            decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(8)),
             child: Text('Fotoğraf Ekle', style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w700)),
           ),
         ),

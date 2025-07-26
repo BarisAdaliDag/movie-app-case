@@ -12,20 +12,11 @@ class CustomBottomSheet extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    // Tasarım oranları
-    // Tasarım: device height 844, bottom sheet height 654, gradient diameter 217
-    // Oran hesaplaması: 217/844 = 0.257 (gradient'in ekran yüksekliğine oranı)
-
-    final gradientSize = screenHeight * 0.500; // ~217px eşdeğeri
+    final gradientSize = screenWidth * 1.5;
     final gradientRadius = gradientSize / 2;
 
-    // Gradient'lerin X pozisyonu için oran
-    // Tasarım: 92.302734375 / 402 (bottom sheet width) = 0.23
-    final gradientX = -screenWidth * 0.1;
+    final gradientX = -screenWidth * 0.25;
 
-    // Gradient'lerin Y pozisyonu için oran
-    // Üst: -83.7408447265625 / 654 = -0.128
-    // Alt: 503.125 / 654 = 0.769
     final topGradientY = gradientRadius - 50; // Yarısı gözükecek
     final bottomGradientY = gradientRadius; // Alt kısımda konumlandır
 
@@ -46,42 +37,48 @@ class CustomBottomSheet extends StatelessWidget {
           Positioned(
             bottom: -topGradientY, // Yarısı gözükecek şekilde
             left: gradientX,
-            child: Container(
-              width: gradientSize,
-              height: gradientSize,
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: [
-                    const Color.fromRGBO(229, 9, 20, 0.8),
-                    const Color.fromRGBO(229, 9, 20, 0.5),
-                    const Color.fromRGBO(229, 9, 20, 0.2),
-                    Colors.transparent,
-                  ],
-                  stops: [0.0, 0.3, 0.6, 1.0],
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+              child: Container(
+                width: gradientSize,
+                height: gradientSize,
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    colors: [
+                      const Color.fromRGBO(229, 9, 20, 0.9),
+                      const Color.fromRGBO(229, 9, 20, 0.6),
+                      const Color.fromRGBO(229, 9, 20, 0.4),
+                      Colors.transparent,
+                    ],
+                    stops: [0.0, 0.3, 0.6, 1.0],
+                  ),
+                  borderRadius: BorderRadius.circular(gradientRadius),
                 ),
-                borderRadius: BorderRadius.circular(gradientRadius),
               ),
             ),
           ),
 
           // Üst gradient (top)
           Positioned(
-            top: -topGradientY, // Yarısı gözükecek şekilde
+            top: -(topGradientY - 20), // Yarısı gözükecek şekilde
             left: gradientX,
-            child: Container(
-              width: gradientSize,
-              height: gradientSize,
-              decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  colors: [
-                    const Color.fromRGBO(229, 9, 20, 0.8),
-                    const Color.fromRGBO(229, 9, 20, 0.5),
-                    const Color.fromRGBO(229, 9, 20, 0.2),
-                    Colors.transparent,
-                  ],
-                  stops: [0.0, 0.3, 0.6, 1.0],
+            child: ClipRRect(
+              borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+              child: Container(
+                width: gradientSize,
+                height: gradientSize,
+                decoration: BoxDecoration(
+                  gradient: RadialGradient(
+                    colors: [
+                      const Color.fromRGBO(229, 9, 20, 0.8),
+                      const Color.fromRGBO(229, 9, 20, 0.5),
+                      const Color.fromRGBO(229, 9, 20, 0.2),
+                      Colors.transparent,
+                    ],
+                    stops: [0.0, 0.3, 0.6, 1.0],
+                  ),
+                  borderRadius: BorderRadius.circular(gradientRadius),
                 ),
-                borderRadius: BorderRadius.circular(gradientRadius),
               ),
             ),
           ),

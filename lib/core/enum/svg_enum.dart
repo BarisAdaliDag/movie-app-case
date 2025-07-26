@@ -10,7 +10,7 @@ enum SvgEnum {
   homeN('homeN'),
   addUser('addUser'),
   gem('gem'),
-  patwaallBackground('paywall_background'),
+  paywallBackground('paywall_background'),
 
   plus('plus');
 
