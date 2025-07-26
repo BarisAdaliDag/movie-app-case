@@ -67,11 +67,6 @@ class _ProfilePageContent extends StatelessWidget {
             return const LoadingWidget(message: 'Loading profile...');
           }
 
-          if (!authState.isAuthenticated) {
-            Future.microtask(() => Navigation.pushReplacementNamed(root: Routes.login));
-            return Container();
-          }
-
           if (authState.user == null) {
             return Center(
               child: Text(
@@ -93,24 +88,25 @@ class _ProfilePageContent extends StatelessWidget {
             builder: (context, profileState) {
               return SafeArea(
                 child: SingleChildScrollView(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       // Profile Header
-                      ProfileHeaderWidget(user: authState.user!),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          ProfileHeaderWidget(user: authState.user!),
+                          const SizedBox(height: 32),
 
-                      const SizedBox(height: 32),
+                          // Favorite Movies Section
+                          ProfileMoviesGridWidget(profileState: profileState),
 
-                      // Favorite Movies Section
-                      ProfileMoviesGridWidget(profileState: profileState),
+                          const SizedBox(height: 32),
+                        ],
+                      ),
 
-                      const SizedBox(height: 32),
-
-                      // Logout Button
-                      const ProfileLogoutButton(),
-
-                      const SizedBox(height: 24),
+                      Column(crossAxisAlignment: CrossAxisAlignment.start, children: [const ProfileLogoutButton()]),
                     ],
                   ),
                 ),
@@ -137,11 +133,20 @@ void showCustomBottomSheet({
     isDismissible: isDismissible,
     enableDrag: enableDrag,
     builder:
-        (context) => Padding(
-          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 100),
-          child: ClipRRect(
-            borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
-            child: CustomBottomSheet(child: child),
+        (context) => GestureDetector(
+          onTap: () => Navigator.of(context).pop(),
+          child: Container(
+            color: Colors.transparent,
+            child: GestureDetector(
+              onTap: () {}, // Bottom sheet içeriğine tıklanınca kapanmasını engeller
+              child: Padding(
+                padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 100),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(32), topRight: Radius.circular(32)),
+                  child: CustomBottomSheet(child: child),
+                ),
+              ),
+            ),
           ),
         ),
   );

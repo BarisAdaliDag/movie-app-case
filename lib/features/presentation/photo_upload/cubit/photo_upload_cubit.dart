@@ -68,9 +68,9 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
           print(authCubit.state.errorMessage);
 
           // Hata mesajını kontrol et
-          String errorMessage = 'Something went wrong';
+          String errorMessage = 'Bir şeyler yanlış gitti';
           if (authCubit.state.errorMessage != null && authCubit.state.errorMessage!.contains('413')) {
-            errorMessage = 'The image size is too large. Please select a smaller image.';
+            errorMessage = 'Resim boyutu çok büyük. Lütfen daha küçük bir resim yükleyin.';
           }
 
           SnackBarHelper.showError(context, errorMessage);

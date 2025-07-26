@@ -5,6 +5,7 @@ import 'package:movieapp/features/data/models/movie/movie_model.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_state.dart';
 import 'package:movieapp/features/presentation/profile/widget/movie_shimmer_card.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_movie_card.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfileMoviesGridWidget extends StatelessWidget {
   final ProfileState profileState;
@@ -52,9 +53,11 @@ class ProfileMoviesGridWidget extends StatelessWidget {
 
   Widget _buildEmptyState() {
     return Center(
-      child: Padding(
+      child: Container(
         padding: const EdgeInsets.all(32),
+        height: 45.h,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(Icons.favorite_border, size: 48, color: AppColors.textSecondary),
             const SizedBox(height: 16),

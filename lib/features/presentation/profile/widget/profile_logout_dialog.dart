@@ -28,7 +28,7 @@ class ProfileLogoutDialog {
                 Navigation.pushReplacementNamed(root: Routes.login);
                 context.read<AuthCubit>().logout();
               },
-              child: Text('Çıkış Yap', style: AppTextStyles.bodyRegular.copyWith(color: AppColors.error)),
+              child: Text('Çıkış Yap', style: AppTextStyles.bodyRegular.copyWith(color: AppColors.primaryColor)),
             ),
           ],
         );

@@ -27,7 +27,7 @@ class HomeCubit extends Cubit<HomeState> {
       }
 
       if (isRefresh) {
-        emit(state.copyWith(isRefreshing: true, error: null));
+        emit(state.copyWith(isRefreshing: true, error: null, isLoading: true));
       } else {
         emit(state.copyWith(isLoading: true, error: null, isInitial: false));
       }

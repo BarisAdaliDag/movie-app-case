@@ -13,7 +13,7 @@ class ProfileLogoutButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: () => ProfileLogoutDialog.show(context),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.error,
+          backgroundColor: AppColors.primaryColor,
           padding: const EdgeInsets.symmetric(vertical: 16),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),

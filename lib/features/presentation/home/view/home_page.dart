@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/getIt/get_it.dart';
 
 import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_state.dart';
@@ -20,12 +21,16 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final PageController _pageController = PageController();
-  int _currentPageIndex = 0;
+  int _currentPageIndex = getIt<HomeCubit>().state.currentPageIndex;
 
   @override
   void initState() {
     super.initState();
     _pageController.addListener(_onPageChanged);
+
+    if (widget.loadPage ?? true) {
+      context.read<HomeCubit>().loadMovies();
+    }
   }
 
   @override
