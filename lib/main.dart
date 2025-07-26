@@ -31,7 +31,7 @@ class MovieApp extends StatelessWidget {
             initialRoute: Routes.splash,
             navigatorKey: Navigation.navigationKey,
             onGenerateRoute: Routes.onGenerateRoutes,
-            title: 'Movie App',
+            title: 'SINFLIX',
             theme: AppTheme.darkTheme,
           );
         },
