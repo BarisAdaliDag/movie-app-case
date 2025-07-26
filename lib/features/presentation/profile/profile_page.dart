@@ -132,6 +132,7 @@ void showCustomBottomSheet({
   showModalBottomSheet(
     context: context,
     backgroundColor: Colors.transparent,
+    // barrierColor: Colors.black.withValues(alpha: 0.5),
     isScrollControlled: true,
     isDismissible: isDismissible,
     enableDrag: enableDrag,
