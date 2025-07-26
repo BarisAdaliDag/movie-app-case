@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:movieapp/core/constants/app_assets.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
-import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/presentation/paywall/cubit/paywall_cubit.dart';
 import 'package:movieapp/features/presentation/paywall/cubit/paywall_state.dart';
+import 'package:movieapp/features/presentation/paywall/widget/bonus_features_card.dart';
 import 'package:movieapp/features/presentation/paywall/widget/paywall_selection_container.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
@@ -51,14 +50,7 @@ class _PaywallPageContent extends StatelessWidget {
 
                   const SizedBox(height: 12),
 
-                  Container(
-                    width: double.infinity,
-                    height: 173,
-                    decoration: BoxDecoration(
-                      // borderRadius: BorderRadius.circular(12),
-                      image: DecorationImage(image: AssetImage(AppAssets.paywallBonus), fit: BoxFit.cover),
-                    ),
-                  ),
+                  BonusFeaturesCard(),
                   Gap(20),
                   Text(
                     'Kilidi açmak için bir jeton paketi seçin',
@@ -115,3 +107,6 @@ class _PaywallPageContent extends StatelessWidget {
     );
   }
 }
+
+// import 'package:flutter/material.dart';
+// import 'dart:ui';
