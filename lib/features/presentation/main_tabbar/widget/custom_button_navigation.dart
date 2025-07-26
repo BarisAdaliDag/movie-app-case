@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
@@ -17,7 +18,8 @@ class CustomBottomNavigation extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         Container(
-          height: 70,
+          height: 71,
+
           decoration: BoxDecoration(
             //  color: Color(0xff090909),
             borderRadius: BorderRadius.circular(40),
@@ -37,13 +39,13 @@ class CustomBottomNavigation extends StatelessWidget {
             children: [
               _buildNavItem(
                 icon: currentIndex == 0 ? Icons.home : Icons.home_outlined,
-                label: 'Anasayfa',
+                label: AppConstants.home,
                 index: 0,
                 isSelected: currentIndex == 0,
               ),
               _buildNavItem(
                 icon: currentIndex == 1 ? Icons.person : Icons.person_outline,
-                label: 'Profil',
+                label: AppConstants.profile,
                 index: 1,
                 isSelected: currentIndex == 1,
               ),

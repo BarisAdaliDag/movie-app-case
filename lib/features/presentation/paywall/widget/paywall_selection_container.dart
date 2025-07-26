@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:movieapp/core/constants/app_assets.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 
@@ -62,7 +63,7 @@ class PaywallSelectionContainer extends StatelessWidget {
                     ),
                   ),
                   Gap(4),
-                  Text('Jeton', style: AppTextStyles.body15MediumCircular.copyWith()),
+                  Text(AppConstants.tokens, style: AppTextStyles.body15MediumCircular.copyWith()),
                   Gap(40),
                   Text(
                     '₺$price',
@@ -74,7 +75,7 @@ class PaywallSelectionContainer extends StatelessWidget {
                       height: 1,
                     ),
                   ),
-                  Text('Başına haftalık', style: AppTextStyles.bodySmall.copyWith()),
+                  Text(AppConstants.weekly, style: AppTextStyles.bodySmall.copyWith()),
                 ],
               ),
             ),

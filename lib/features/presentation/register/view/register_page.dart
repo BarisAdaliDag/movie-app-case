@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
@@ -83,7 +84,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
 
                   // Email Field
                   CustomTextField(
-                    hint: 'E-Posta',
+                    hint: AppConstants.email,
                     controller: formCubit.emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: formCubit.validateEmail,
@@ -94,7 +95,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
 
                   // Password Field
                   AuthPasswordField(
-                    hint: 'Şifre',
+                    hint: AppConstants.password,
                     controller: formCubit.passwordController,
                     obscureText: formState.obscurePassword,
                     validator: formCubit.validatePassword,
@@ -106,7 +107,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
 
                   // Confirm Password Field
                   CustomTextField(
-                    hint: 'Şifre Tekrar',
+                    hint: AppConstants.confirmPassword,
                     controller: formCubit.confirmPasswordController,
                     obscureText: formState.obscureConfirmPassword,
                     validator: formCubit.validateConfirmPassword,
@@ -124,7 +125,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
                   BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, authState) {
                       return CustomButton(
-                        text: 'Şimdi Kaydol',
+                        text: AppConstants.register,
                         onPressed: () => _register(context),
                         isLoading: authState.isLoading,
                       );
@@ -140,8 +141,8 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
 
                   // Login Link
                   AuthNavigationLink(
-                    text: "Zaten bir hesabın var mı? ",
-                    linkText: 'Giriş Yap!',
+                    text: AppConstants.alreadyHaveAccount,
+                    linkText: AppConstants.loginLink,
                     onPressed: () => Navigation.ofPop(),
                   ),
                 ],
@@ -157,7 +158,7 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
     return Wrap(
       children: [
         Text(
-          'Kullanıcı sözleşmesini ',
+          AppConstants.termsText1,
           style: AppTextStyles.bodyMedium.copyWith(fontSize: 12, color: AppColors.textSecondary),
         ),
         GestureDetector(
@@ -165,12 +166,12 @@ class _RegisterPageViewState extends State<_RegisterPageView> with AuthFormMixin
             // Terms page navigation
           },
           child: Text(
-            'okudum ve kabul ediyorum.',
+            AppConstants.termsText2,
             style: AppTextStyles.bodyMedium.copyWith(decoration: TextDecoration.underline, fontSize: 12),
           ),
         ),
         Text(
-          'Bu sözleşmeyi okuyarak devam ediniz lütfen.',
+          AppConstants.termsText3,
           style: AppTextStyles.bodyMedium.copyWith(fontSize: 12, color: AppColors.textSecondary),
         ),
       ],

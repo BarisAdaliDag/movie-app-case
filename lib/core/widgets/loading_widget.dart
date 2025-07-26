@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 
 class LoadingWidget extends StatelessWidget {
   final String message;
 
-  const LoadingWidget({super.key, this.message = 'Loading...'});
+  const LoadingWidget({super.key, this.message = AppConstants.loading});
 
   @override
   Widget build(BuildContext context) {

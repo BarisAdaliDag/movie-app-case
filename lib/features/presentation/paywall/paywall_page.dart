@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:movieapp/core/constants/app_assets.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
@@ -38,7 +39,7 @@ class _PaywallPageContent extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('Sınırlı Teklif', style: AppTextStyles.headline3.copyWith(fontSize: 20)),
+                  Text(AppConstants.limitedOffer, style: AppTextStyles.headline3.copyWith(fontSize: 20)),
 
                   const SizedBox(height: 4),
 
@@ -53,7 +54,7 @@ class _PaywallPageContent extends StatelessWidget {
                   BonusFeaturesCard(),
                   Gap(20),
                   Text(
-                    'Kilidi açmak için bir jeton paketi seçin',
+                    AppConstants.unlockDescription,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.bottomTabBarStyle.copyWith(),
                   ),
@@ -93,7 +94,7 @@ class _PaywallPageContent extends StatelessWidget {
 
                   Gap(20),
                   CustomButton(
-                    text: "Tüm Jetonları Gör",
+                    text: AppConstants.seeAllTokens,
                     onPressed: () {
                       //    Navigation.ofPop();
                     },

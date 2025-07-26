@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/routes/routes.dart';
@@ -31,7 +32,7 @@ class MovieApp extends StatelessWidget {
             initialRoute: Routes.splash,
             navigatorKey: Navigation.navigationKey,
             onGenerateRoute: Routes.onGenerateRoutes,
-            title: 'SINFLIX',
+            title: AppConstants.sinflix,
             theme: AppTheme.darkTheme,
           );
         },

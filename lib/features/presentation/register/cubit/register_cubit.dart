@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/features/presentation/register/cubit/register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterFormState> {
@@ -22,7 +23,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
   // Validation methods
   String? validateName(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Name is required';
+      return AppConstants.nameRequired;
     }
     if (value.length < 2) {
       return 'Name must be at least 2 characters';
@@ -32,20 +33,20 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
   String? validateEmail(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Email is required';
+      return AppConstants.emailRequired;
     }
     if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-      return 'Enter a valid email';
+      return AppConstants.enterValidEmail;
     }
     return null;
   }
 
   String? validatePassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Password is required';
+      return AppConstants.passwordRequired;
     }
     if (value.length < 6) {
-      return 'Password must be at least 6 characters';
+      return AppConstants.passwordMinLength;
     }
 
     _updatePasswordStrength(value);
@@ -54,10 +55,10 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
   String? validateConfirmPassword(String? value) {
     if (value == null || value.isEmpty) {
-      return 'Confirm password is required';
+      return AppConstants.confirmPasswordRequired;
     }
     if (value != passwordController.text) {
-      return 'Passwords do not match';
+      return AppConstants.passwordsDoNotMatch;
     }
     return null;
   }
@@ -80,7 +81,7 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
   // Password strength
   void _updatePasswordStrength(String password) {
-    String strength = 'Weak';
+    String strength = AppConstants.weak;
 
     if (password.length >= 8) {
       bool hasUpper = password.contains(RegExp(r'[A-Z]'));
@@ -92,16 +93,16 @@ class RegisterCubit extends Cubit<RegisterFormState> {
 
       switch (score) {
         case 4:
-          strength = 'Very Strong';
+          strength = AppConstants.veryStrong;
           break;
         case 3:
-          strength = 'Strong';
+          strength = AppConstants.strong;
           break;
         case 2:
-          strength = 'Medium';
+          strength = AppConstants.medium;
           break;
         default:
-          strength = 'Weak';
+          strength = AppConstants.weak;
       }
     }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
@@ -66,8 +67,8 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
 
                   // Header
                   AuthHeader(
-                    title: 'Merhabalar',
-                    subtitle: 'Tempus varius a vitae interdum id tortor elementum tristique eleifend at.',
+                    title: AppConstants.welcome,
+                    subtitle: AppConstants.welcomeSubtitle,
                     titleStyle: AppTextStyles.headline3,
                   ),
 
@@ -75,7 +76,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
 
                   // Email Field
                   CustomTextField(
-                    hint: 'E-Posta',
+                    hint: AppConstants.email,
                     controller: formCubit.emailController,
                     keyboardType: TextInputType.emailAddress,
                     validator: formCubit.validateEmail,
@@ -86,7 +87,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
 
                   // Password Field
                   AuthPasswordField(
-                    hint: 'Şifre',
+                    hint: AppConstants.password,
                     controller: formCubit.passwordController,
                     obscureText: formState.obscurePassword,
                     validator: formCubit.validatePassword,
@@ -99,7 +100,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
                   Row(
                     children: [
                       Text(
-                        'Şifremi unuttum',
+                        AppConstants.forgotPassword,
                         style: AppTextStyles.bodyMedium.copyWith(decoration: TextDecoration.underline),
                       ),
                     ],
@@ -111,7 +112,7 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
                   BlocBuilder<AuthCubit, AuthState>(
                     builder: (context, authState) {
                       return CustomButton(
-                        text: 'Giriş Yap',
+                        text: AppConstants.login,
                         onPressed: () => _login(context),
                         isLoading: authState.isLoading,
                       );
@@ -127,8 +128,8 @@ class _LoginPageViewState extends State<_LoginPageView> with AuthFormMixin {
 
                   // Register Link
                   AuthNavigationLink(
-                    text: "Bir hesabın yok mu? ",
-                    linkText: 'Kayıt Ol!',
+                    text: AppConstants.noAccount,
+                    linkText: AppConstants.registerLink,
                     onPressed: () {
                       Navigation.pushNamed(root: Routes.register);
                     },

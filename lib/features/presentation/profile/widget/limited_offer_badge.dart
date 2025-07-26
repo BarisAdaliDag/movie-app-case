@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
@@ -29,7 +30,7 @@ class LimitedOfferBadge extends StatelessWidget {
 
               // İkon ile metin arası boşluk
               // Metin
-              Text('Sınırlı Teklif', style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w500)),
+              Text(AppConstants.limitedOffer, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w500)),
             ],
           ),
         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
@@ -139,7 +140,7 @@ class HomeMovieCard extends StatelessWidget {
 
                               // "Daha Fazlası" için yer hesapla
                               final readMorePainter = TextPainter(
-                                text: TextSpan(text: " Daha Fazlası", style: readMoreStyle),
+                                text: TextSpan(text: AppConstants.readMore, style: readMoreStyle),
                                 textDirection: TextDirection.ltr,
                               );
                               readMorePainter.layout();
@@ -174,7 +175,7 @@ class HomeMovieCard extends StatelessWidget {
                                   children: [
                                     TextSpan(text: truncatedText),
                                     TextSpan(
-                                      text: " ...Daha Fazlası",
+                                      text: AppConstants.readMore,
                                       style: readMoreStyle.copyWith(color: AppColors.white),
                                     ),
                                   ],

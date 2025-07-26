@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:movieapp/core/constants/app_assets.dart';
-
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 
@@ -23,7 +23,10 @@ class BonusFeaturesCard extends StatelessWidget {
             child: Column(
               children: [
                 // Title
-                Text('Alacağınız Bonuslar', style: AppTextStyles.body15MediumCircular.copyWith(color: AppColors.white)),
+                Text(
+                  AppConstants.bonusFeatures,
+                  style: AppTextStyles.body15MediumCircular.copyWith(color: AppColors.white),
+                ),
 
                 const SizedBox(height: 12),
 
@@ -31,10 +34,10 @@ class BonusFeaturesCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    _buildBonusItem(title: 'Premium\nHesap', path: AppAssets.diamond),
-                    _buildBonusItem(title: 'Daha\nFazla Eşleşme', path: AppAssets.hearts),
-                    _buildBonusItem(title: 'Öne\nÇıkarma', path: AppAssets.arrowUp),
-                    _buildBonusItem(title: 'Daha\nFazla Beğeni', path: AppAssets.heart),
+                    _buildBonusItem(title: AppConstants.premiumAccount, path: AppAssets.diamond),
+                    _buildBonusItem(title: AppConstants.moreMatches, path: AppAssets.hearts),
+                    _buildBonusItem(title: AppConstants.boost, path: AppAssets.arrowUp),
+                    _buildBonusItem(title: AppConstants.moreLikes, path: AppAssets.heart),
                   ],
                 ),
               ],

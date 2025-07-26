@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
@@ -58,7 +59,10 @@ class ProfileHeaderWidget extends StatelessWidget {
             children: [
               Text(user.name, style: AppTextStyles.appBarStyle.copyWith(color: AppColors.white)),
               const SizedBox(height: 4),
-              Text('ID: ${user.id}', style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary)),
+              Text(
+                '${AppConstants.userId}${user.id}',
+                style: AppTextStyles.bodyRegular.copyWith(color: AppColors.textSecondary),
+              ),
             ],
           ).onlyPadding(right: 10),
         ),
@@ -69,7 +73,7 @@ class ProfileHeaderWidget extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(color: AppColors.primaryColor, borderRadius: BorderRadius.circular(8)),
-            child: Text('Fotoğraf Ekle', style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w700)),
+            child: Text(AppConstants.addPhoto, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.w700)),
           ),
         ),
       ],
