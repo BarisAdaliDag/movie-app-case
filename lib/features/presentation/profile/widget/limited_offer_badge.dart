@@ -8,16 +8,13 @@ import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/svg_widget.dart';
 
 class LimitedOfferBadge extends StatelessWidget {
-  const LimitedOfferBadge({super.key});
+  const LimitedOfferBadge({super.key, this.onTap});
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        // Burada sınırlı teklif badge'ine tıklandığında yapılacak işlemler
-        // Örneğin, bir sayfaya yönlendirme veya bir dialog gösterme
-        print('Sınırlı Teklif Badge\'ine tıklandı');
-      },
+      onTap: onTap,
       child: Container(
         width: 105,
         height: 33,

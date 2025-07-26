@@ -9,12 +9,15 @@ import 'package:movieapp/core/widgets/custom_app_bar.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
+import 'package:movieapp/features/presentation/paywall/custom_bottom_sheet.dart';
+import 'package:movieapp/features/presentation/paywall/paywall.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_cubit.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_state.dart';
 import 'package:movieapp/features/presentation/profile/widget/limited_offer_badge.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_header_widget.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_movies_grid_widget.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_logout_button.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
@@ -31,11 +34,31 @@ class ProfilePage extends StatelessWidget {
 class _ProfilePageContent extends StatelessWidget {
   const _ProfilePageContent();
 
+  void showLimitedOfferPopup(BuildContext context) {
+    // showDialog(
+    //   context: context,
+    //   barrierDismissible: true,
+    //   barrierColor: Colors.black.withValues(alpha: 0.7),
+    //   builder: (context) => const LimitedOfferPopup(),
+    // );
+    showCustomBottomSheet(context: context, child: SizedBox(height: 70.h, width: 100.w));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
-      appBar: CustomAppBar(title: "Profil Detayı", showBackButton: false, actions: [LimitedOfferBadge()]),
+      appBar: CustomAppBar(
+        title: "Profil Detayı",
+        showBackButton: false,
+        actions: [
+          LimitedOfferBadge(
+            onTap: () {
+              showLimitedOfferPopup(context);
+            },
+          ),
+        ],
+      ),
       body: BlocBuilder<AuthCubit, AuthState>(
         builder: (context, authState) {
           if (authState.isLoading) {
@@ -96,4 +119,24 @@ class _ProfilePageContent extends StatelessWidget {
       ),
     );
   }
+}
+
+void showCustomBottomSheet({
+  required BuildContext context,
+  required Widget child,
+  bool isDismissible = true,
+  bool enableDrag = true,
+}) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent,
+    isScrollControlled: true,
+    isDismissible: isDismissible,
+    enableDrag: enableDrag,
+    builder:
+        (context) => Padding(
+          padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom, top: 100),
+          child: CustomBottomSheet(child: child),
+        ),
+  );
 }

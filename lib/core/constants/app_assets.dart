@@ -1,8 +1,8 @@
 final class AppAssets {
   AppAssets._();
 
-  static const splashImage = "assets/images/splash.png";
+  static const appAssetsPath = "assets/images/";
+  static const splashImage = "${appAssetsPath}splash.png";
 
-  static const settingPremium = "assets/image/settings_premium.png";
-  static const recordBackground = "assets/image/img_gradient.png";
+  static const paywallBackground = "${appAssetsPath}paywall_background.png";
 }
