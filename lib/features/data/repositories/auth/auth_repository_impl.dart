@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:dio/dio.dart';
 import 'package:movieapp/core/error/error_handler.dart';
 import 'package:movieapp/core/error/failures.dart';
 import 'package:movieapp/core/services/photo_upload_service.dart';

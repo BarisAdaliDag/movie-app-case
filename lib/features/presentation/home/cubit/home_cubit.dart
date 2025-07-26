@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/utils/secure_storage.dart';
 import 'package:movieapp/features/data/models/movie/movie_model.dart';
@@ -43,11 +44,15 @@ class HomeCubit extends Cubit<HomeState> {
 
       // Rastgele sayfa numaraları listesi oluştur
       final randomPages = _generateRandomPageNumbers(maxPage);
-      print('random pages $randomPages');
+      if (kDebugMode) {
+        print('random pages $randomPages');
+      }
       // İlk sayfa numarasını kullanarak filmleri yükle
       final firstPageNumber = randomPages.first;
       final moviesResponse = await movieRepository.getMovies(token: token, page: firstPageNumber);
-      print('Loaded movies for page $firstPageNumber: ${moviesResponse.movies.length}');
+      if (kDebugMode) {
+        print('Loaded movies for page $firstPageNumber: ${moviesResponse.movies.length}');
+      }
 
       emit(
         state.copyWith(
@@ -81,7 +86,9 @@ class HomeCubit extends Cubit<HomeState> {
       final nextPageNumber = state.randomPageNumbers[nextPageIndex];
 
       final moviesResponse = await movieRepository.getMovies(token: token, page: nextPageNumber);
-      print('Loaded movies for nextPageNumber page $nextPageNumber: ${moviesResponse.movies.length}');
+      if (kDebugMode) {
+        print('Loaded movies for nextPageNumber page $nextPageNumber: ${moviesResponse.movies.length}');
+      }
 
       // Sadece yeni filmleri ekle, mevcut filmleri koru
       final updatedMovies = [...state.movies, ...moviesResponse.movies];
@@ -117,12 +124,16 @@ class HomeCubit extends Cubit<HomeState> {
 
       // Rastgele sayfa numaraları listesi oluştur
       final randomPages = _generateRandomPageNumbers(maxPage);
-      print('refresh random pages $randomPages');
+      if (kDebugMode) {
+        print('refresh random pages $randomPages');
+      }
 
       // İlk sayfa numarasını kullanarak filmleri yükle
       final firstPageNumber = randomPages.first;
       final moviesResponse = await movieRepository.getMovies(token: token, page: firstPageNumber);
-      print('Refresh loaded movies for page $firstPageNumber: ${moviesResponse.movies.length}');
+      if (kDebugMode) {
+        print('Refresh loaded movies for page $firstPageNumber: ${moviesResponse.movies.length}');
+      }
 
       emit(
         state.copyWith(

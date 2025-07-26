@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
@@ -65,7 +66,9 @@ class PhotoUploadCubit extends Cubit<PhotoUploadState> {
 
           return true;
         } else {
-          print(authCubit.state.errorMessage);
+          if (kDebugMode) {
+            print(authCubit.state.errorMessage);
+          }
 
           // Hata mesajını kontrol et
           String errorMessage = 'Bir şeyler yanlış gitti';

@@ -9,7 +9,6 @@ class CustomBottomSheet extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
     final gradientSize = screenWidth * 1.5;
@@ -18,7 +17,6 @@ class CustomBottomSheet extends StatelessWidget {
     final gradientX = -screenWidth * 0.25;
 
     final topGradientY = gradientRadius - 50; // Yarısı gözükecek
-    final bottomGradientY = gradientRadius; // Alt kısımda konumlandır
 
     return Container(
       width: double.infinity,

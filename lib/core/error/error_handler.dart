@@ -1,10 +1,13 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:movieapp/core/error/failures.dart';
 import 'exceptions.dart';
 
 class ErrorHandler {
   static AuthFailure handleError(dynamic error) {
-    print('🔴 Error: $error');
+    if (kDebugMode) {
+      print('🔴 Error: $error');
+    }
 
     if (error is DioException) {
       return _handleDioError(error);

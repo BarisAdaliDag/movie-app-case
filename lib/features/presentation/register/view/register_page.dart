@@ -4,7 +4,6 @@ import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/extension/padding_extension.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
-import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';

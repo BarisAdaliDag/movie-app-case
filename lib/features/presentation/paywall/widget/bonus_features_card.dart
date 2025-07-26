@@ -17,31 +17,29 @@ class BonusFeaturesCard extends StatelessWidget {
         decoration: BoxDecoration(
           image: DecorationImage(image: AssetImage(AppAssets.paywallBonusBackground), fit: BoxFit.cover),
         ),
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              children: [
-                // Title
-                Text(
-                  AppConstants.bonusFeatures,
-                  style: AppTextStyles.body15MediumCircular.copyWith(color: AppColors.white),
-                ),
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            children: [
+              // Title
+              Text(
+                AppConstants.bonusFeatures,
+                style: AppTextStyles.body15MediumCircular.copyWith(color: AppColors.white),
+              ),
 
-                const SizedBox(height: 12),
+              const SizedBox(height: 12),
 
-                // Bonus Icons Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buildBonusItem(title: AppConstants.premiumAccount, path: AppAssets.diamond),
-                    _buildBonusItem(title: AppConstants.moreMatches, path: AppAssets.hearts),
-                    _buildBonusItem(title: AppConstants.boost, path: AppAssets.arrowUp),
-                    _buildBonusItem(title: AppConstants.moreLikes, path: AppAssets.heart),
-                  ],
-                ),
-              ],
-            ),
+              // Bonus Icons Row
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildBonusItem(title: AppConstants.premiumAccount, path: AppAssets.diamond),
+                  _buildBonusItem(title: AppConstants.moreMatches, path: AppAssets.hearts),
+                  _buildBonusItem(title: AppConstants.boost, path: AppAssets.arrowUp),
+                  _buildBonusItem(title: AppConstants.moreLikes, path: AppAssets.heart),
+                ],
+              ),
+            ],
           ),
         ),
       ),

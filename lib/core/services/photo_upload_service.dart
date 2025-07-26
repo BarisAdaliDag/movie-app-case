@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../constants/api_constants.dart';
 import '../utils/secure_storage.dart';
@@ -26,14 +26,22 @@ class PhotoUploadService {
 
       request.files.add(multipartFile);
 
-      print('🚀 Uploading photo: ${imageFile.path}');
-      print('🔑 Using token: ${token.substring(0, 20)}...');
+      if (kDebugMode) {
+        print('🚀 Uploading photo: ${imageFile.path}');
+      }
+      if (kDebugMode) {
+        print('🔑 Using token: ${token.substring(0, 20)}...');
+      }
 
       var streamedResponse = await request.send();
       var response = await http.Response.fromStream(streamedResponse);
 
-      print('📥 Upload response: ${response.statusCode}');
-      print('📥 Upload body: ${response.body}');
+      if (kDebugMode) {
+        print('📥 Upload response: ${response.statusCode}');
+      }
+      if (kDebugMode) {
+        print('📥 Upload body: ${response.body}');
+      }
 
       if (response.statusCode == 200) {
         final responseData = response.body;
@@ -43,7 +51,9 @@ class PhotoUploadService {
         throw Exception('Upload failed with status: ${response.statusCode}');
       }
     } catch (e) {
-      print('❌ Photo upload error: $e');
+      if (kDebugMode) {
+        print('❌ Photo upload error: $e');
+      }
       throw Exception('Failed to upload photo: $e');
     }
   }

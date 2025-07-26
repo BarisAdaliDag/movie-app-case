@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:movieapp/core/constants/app_assets.dart';
 import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
-import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/presentation/paywall/cubit/paywall_cubit.dart';

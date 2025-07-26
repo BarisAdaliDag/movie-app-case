@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:movieapp/core/constants/app_constants.dart';
-import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
 import 'package:movieapp/core/theme/text_styles.dart';
-import 'package:movieapp/core/widgets/svg_widget.dart';
 
 class CustomBottomNavigation extends StatelessWidget {
   final int currentIndex;

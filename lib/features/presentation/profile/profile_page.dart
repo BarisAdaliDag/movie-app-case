@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/constants/app_constants.dart';
-import 'package:movieapp/core/enum/svg_enum.dart';
 import 'package:movieapp/core/getIt/get_it.dart';
-import 'package:movieapp/core/routes/navigation_helper.dart';
-import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/theme/app_colors.dart';
-import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/core/widgets/custom_app_bar.dart';
-import 'package:movieapp/core/widgets/svg_widget.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/core/widgets/loading_widget.dart';
@@ -20,7 +15,6 @@ import 'package:movieapp/features/presentation/profile/widget/limited_offer_badg
 import 'package:movieapp/features/presentation/profile/widget/profile_header_widget.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_movies_grid_widget.dart';
 import 'package:movieapp/features/presentation/profile/widget/profile_logout_button.dart';
-import 'package:responsive_sizer/responsive_sizer.dart';
 
 class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});

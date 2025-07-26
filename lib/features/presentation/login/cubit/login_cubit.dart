@@ -6,8 +6,8 @@ import 'package:movieapp/features/presentation/login/cubit/login_state.dart';
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(const LoginState());
 
-  final TextEditingController emailController = TextEditingController(text: 'ada2@gmail.com');
-  final TextEditingController passwordController = TextEditingController(text: '123456');
+  final TextEditingController emailController = TextEditingController(text: '');
+  final TextEditingController passwordController = TextEditingController(text: '');
 
   @override
   Future<void> close() {
@@ -75,8 +75,8 @@ class LoginCubit extends Cubit<LoginState> {
   }
 
   void setTestCredentials() {
-    emailController.text = 'ada2@gmail.com';
-    passwordController.text = '123456';
+    emailController.text = '';
+    passwordController.text = '';
     updateFormValidity();
   }
 }

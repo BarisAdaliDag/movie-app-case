@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:movieapp/core/constants/app_constants.dart';
 import 'package:movieapp/core/getIt/get_It.dart';
 import 'package:movieapp/core/routes/navigation_helper.dart';
-import 'package:movieapp/core/routes/routes.dart';
 import 'package:movieapp/core/widgets/custom_button.dart';
 import 'package:movieapp/features/data/models/auth/user_model.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
