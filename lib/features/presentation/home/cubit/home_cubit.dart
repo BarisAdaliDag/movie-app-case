@@ -18,8 +18,13 @@ class HomeCubit extends Cubit<HomeState> {
     return pages;
   }
 
+  void setLoading(bool isLoading) {
+    emit(state.copyWith(isLoading: isLoading));
+  }
+
   Future<void> loadMovies({bool isRefresh = false}) async {
     try {
+      emit(state.copyWith(isLoading: true));
       final token = await SecureStorage.getToken();
       if (token == null) {
         emit(state.copyWith(error: 'Token bulunamadı', isLoading: false, isRefreshing: false, isInitial: false));

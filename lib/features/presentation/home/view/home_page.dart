@@ -26,11 +26,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-    _pageController.addListener(_onPageChanged);
 
-    if (widget.loadPage ?? true) {
-      context.read<HomeCubit>().loadMovies();
-    }
+    _pageController.addListener(_onPageChanged);
   }
 
   @override

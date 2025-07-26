@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:movieapp/core/theme/app_colors.dart';
-import 'package:movieapp/core/theme/text_styles.dart';
 import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/home/view/home_page.dart';
+import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 import 'package:movieapp/features/presentation/main_tabbar/widget/custom_button_navigation.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 
@@ -20,7 +19,7 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
   int _currentIndex = 0;
   late PageController _pageController;
 
-  final List<Widget> _pages = [const HomePage(loadPage: true), const ProfilePage()];
+  final List<Widget> _pages = [const HomePage(loadPage: false), const ProfilePage()];
 
   @override
   void initState() {
@@ -36,13 +35,32 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
   }
 
   void _onPageChanged(int index) {
+    if (index == 0) {
+      context.read<HomeCubit>().loadMovies();
+    }
     setState(() {
       _currentIndex = index;
     });
+
+    // Eğer home sayfasına (index 0) geçiş yapıldıysa ve movies boşsa yükle
+    if (index == 0) {
+      final homeCubit = context.read<HomeCubit>();
+      if (homeCubit.state.movies.isEmpty && !homeCubit.state.isLoading) {
+        homeCubit.loadMovies();
+      }
+    }
   }
 
   void _onTabTapped(int index) {
     _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.ease);
+
+    // Eğer home sayfasına (index 0) geçiş yapıldıysa ve movies boşsa yükle
+    if (index == 0) {
+      final homeCubit = context.read<HomeCubit>();
+      if (homeCubit.state.movies.isEmpty && !homeCubit.state.isLoading) {
+        homeCubit.loadMovies();
+      }
+    }
   }
 
   @override
