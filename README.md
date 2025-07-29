@@ -59,12 +59,12 @@ flutter run
 
 
 <p>
-  <img src="assets/images/scr1.png" alt="Aydınlık Mod 1" width="100">
-  <img src="assets/images/scr2.png" alt="Aydınlık Mod 2" width="100">
-  <img src="assets/images/scr3.png" alt="Aydınlık Mod 3" width="100">
+  <img src="assets/images/scr1.png" alt="Aydınlık Mod 1" width="150">
+  <img src="assets/images/scr2.png" alt="Aydınlık Mod 2" width="150">
+  <img src="assets/images/scr3.png" alt="Aydınlık Mod 3" width="150">
 </p>
 <p>
-  <img src="assets/images/scr4.png" alt="Aydınlık Mod 4" width="100">
-  <img src="assets/images/scr5.png" alt="Aydınlık Mod 5" width="100">
-  <img src="assets/images/scr6.png" alt="Aydınlık Mod 6" width="100">
+  <img src="assets/images/scr4.png" alt="Aydınlık Mod 4" width="150">
+  <img src="assets/images/scr5.png" alt="Aydınlık Mod 5" width="150">
+  <img src="assets/images/scr6.png" alt="Aydınlık Mod 6" width="150">
 </p>
