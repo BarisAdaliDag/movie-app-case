@@ -4,28 +4,39 @@ import 'package:movieapp/features/data/cubit/auth_cubit.dart';
 import 'package:movieapp/features/data/cubit/auth_state.dart';
 import 'package:movieapp/features/presentation/home/view/home_page.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
+import 'package:movieapp/features/presentation/main_tabbar/cubit/main_tabbar_cubit.dart';
 import 'package:movieapp/features/presentation/main_tabbar/widget/custom_button_navigation.dart';
 import 'package:movieapp/features/presentation/profile/profile_page.dart';
 
-class MainTabbarPage extends StatefulWidget {
+class MainTabbarPage extends StatelessWidget {
   const MainTabbarPage({super.key, this.initialIndex = 0});
   final int initialIndex;
 
   @override
-  State<MainTabbarPage> createState() => _MainTabbarPageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (context) => MainTabbarCubit(initialIndex: initialIndex),
+      child: const _MainTabbarPageContent(),
+    );
+  }
 }
 
-class _MainTabbarPageState extends State<MainTabbarPage> {
-  int _currentIndex = 0;
-  late PageController _pageController;
+class _MainTabbarPageContent extends StatefulWidget {
+  const _MainTabbarPageContent();
 
+  @override
+  State<_MainTabbarPageContent> createState() => _MainTabbarPageContentState();
+}
+
+class _MainTabbarPageContentState extends State<_MainTabbarPageContent> {
+  late PageController _pageController;
   final List<Widget> _pages = [const HomePage(loadPage: false), const ProfilePage()];
 
   @override
   void initState() {
     super.initState();
-    _currentIndex = widget.initialIndex;
-    _pageController = PageController(initialPage: widget.initialIndex);
+    final cubit = context.read<MainTabbarCubit>();
+    _pageController = PageController(initialPage: cubit.state.currentIndex);
   }
 
   @override
@@ -35,14 +46,8 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
   }
 
   void _onPageChanged(int index) {
-    if (index == 0) {
-      context.read<HomeCubit>().loadMovies();
-    }
-    setState(() {
-      _currentIndex = index;
-    });
+    context.read<MainTabbarCubit>().changeTab(index);
 
-    // Eğer home sayfasına (index 0) geçiş yapıldıysa ve movies boşsa yükle
     if (index == 0) {
       final homeCubit = context.read<HomeCubit>();
       if (homeCubit.state.movies.isEmpty && !homeCubit.state.isLoading) {
@@ -54,7 +59,6 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
   void _onTabTapped(int index) {
     _pageController.animateToPage(index, duration: const Duration(milliseconds: 300), curve: Curves.ease);
 
-    // Eğer home sayfasına (index 0) geçiş yapıldıysa ve movies boşsa yükle
     if (index == 0) {
       final homeCubit = context.read<HomeCubit>();
       if (homeCubit.state.movies.isEmpty && !homeCubit.state.isLoading) {
@@ -71,15 +75,20 @@ class _MainTabbarPageState extends State<MainTabbarPage> {
       },
       child: SafeArea(
         bottom: false,
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: Column(
-            children: [
-              Expanded(child: PageView(controller: _pageController, onPageChanged: _onPageChanged, children: _pages)),
-              CustomBottomNavigation(currentIndex: _currentIndex, onTap: _onTabTapped),
-            ],
-          ),
-          // bottomNavigationBar: CustomBottomNavigation(currentIndex: _currentIndex, onTap: _onTabTapped),
+        child: BlocBuilder<MainTabbarCubit, MainTabbarState>(
+          builder: (context, state) {
+            return Scaffold(
+              backgroundColor: Colors.transparent,
+              body: Column(
+                children: [
+                  Expanded(
+                    child: PageView(controller: _pageController, onPageChanged: _onPageChanged, children: _pages),
+                  ),
+                  CustomBottomNavigation(currentIndex: state.currentIndex, onTap: _onTabTapped),
+                ],
+              ),
+            );
+          },
         ),
       ),
     );

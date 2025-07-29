@@ -11,22 +11,16 @@ import 'package:movieapp/features/presentation/paywall/widget/bonus_features_car
 import 'package:movieapp/features/presentation/paywall/widget/paywall_selection_container.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
-// Bottom sheet içeriği örneği
 class PaywallPage extends StatelessWidget {
   const PaywallPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(create: (context) => getIt<PaywallCubit>(), child: const _PaywallPageContent());
-  }
-}
+    // GetIt'ten direkt cubit instance'ı al
+    final paywallCubit = getIt<PaywallCubit>();
 
-class _PaywallPageContent extends StatelessWidget {
-  const _PaywallPageContent();
-
-  @override
-  Widget build(BuildContext context) {
     return BlocBuilder<PaywallCubit, PaywallState>(
+      bloc: paywallCubit, // Bloc parametresi ekle
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.all(20),
@@ -67,7 +61,7 @@ class _PaywallPageContent extends StatelessWidget {
                         currentjetons: '330',
                         price: '99.99',
                         isSelected: state.selectedPackageIndex == 0,
-                        onTap: () => context.read<PaywallCubit>().selectPackage(0),
+                        onTap: () => paywallCubit.selectPackage(0), // Direkt cubit kullan
                       ),
                       PaywallSelectionContainer(
                         index: 1,
@@ -76,7 +70,7 @@ class _PaywallPageContent extends StatelessWidget {
                         currentjetons: '3375',
                         price: '799.99',
                         isSelected: state.selectedPackageIndex == 1,
-                        onTap: () => context.read<PaywallCubit>().selectPackage(1),
+                        onTap: () => paywallCubit.selectPackage(1), // Direkt cubit kullan
                       ),
                       PaywallSelectionContainer(
                         index: 2,
@@ -85,7 +79,7 @@ class _PaywallPageContent extends StatelessWidget {
                         currentjetons: '1350',
                         price: '399.99',
                         isSelected: state.selectedPackageIndex == 2,
-                        onTap: () => context.read<PaywallCubit>().selectPackage(2),
+                        onTap: () => paywallCubit.selectPackage(2), // Direkt cubit kullan
                       ),
                     ],
                   ),

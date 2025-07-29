@@ -32,13 +32,7 @@ class _ProfilePageContent extends StatelessWidget {
   const _ProfilePageContent();
 
   void showLimitedOfferPopup(BuildContext context) {
-    // showDialog(
-    //   context: context,
-    //   barrierDismissible: true,
-    //   barrierColor: Colors.black.withValues(alpha: 0.7),
-    //   builder: (context) => const LimitedOfferPopup(),
-    // );
-    showCustomBottomSheet(context: context, child: PaywallPage());
+    _showCustomBottomSheet(context: context, child: PaywallPage());
   }
 
   @override
@@ -114,7 +108,7 @@ class _ProfilePageContent extends StatelessWidget {
   }
 }
 
-void showCustomBottomSheet({
+void _showCustomBottomSheet({
   required BuildContext context,
   required Widget child,
   bool isDismissible = true,

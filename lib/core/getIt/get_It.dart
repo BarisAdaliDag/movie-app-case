@@ -6,6 +6,7 @@ import 'package:movieapp/features/data/repositories/movie/movie_repository.dart'
 import 'package:movieapp/features/data/repositories/movie/movie_repository_impl.dart';
 import 'package:movieapp/features/presentation/home/cubit/home_cubit.dart';
 import 'package:movieapp/features/presentation/login/cubit/login_cubit.dart';
+import 'package:movieapp/features/presentation/main_tabbar/cubit/main_tabbar_cubit.dart';
 import 'package:movieapp/features/presentation/paywall/cubit/paywall_cubit.dart';
 import 'package:movieapp/features/presentation/photo_upload/cubit/photo_upload_cubit.dart';
 import 'package:movieapp/features/presentation/profile/cubit/profile_cubit.dart';
@@ -47,4 +48,5 @@ void registerCubits() {
   getIt.registerFactory<ProfileCubit>(() => ProfileCubit(movieRepository: getIt<MovieRepository>()));
   getIt.registerFactory<LoginCubit>(() => LoginCubit());
   getIt.registerFactory<RegisterCubit>(() => RegisterCubit());
+  getIt.registerFactory<MainTabbarCubit>(() => MainTabbarCubit(initialIndex: 0));
 }

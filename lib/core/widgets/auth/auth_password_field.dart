@@ -12,6 +12,7 @@ class AuthPasswordField extends StatelessWidget {
   final VoidCallback onToggleVisibility;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final TextInputAction? textInputAction;
 
   const AuthPasswordField({
     super.key,
@@ -21,6 +22,7 @@ class AuthPasswordField extends StatelessWidget {
     required this.onToggleVisibility,
     this.validator,
     this.onChanged,
+    this.textInputAction,
   });
 
   @override
@@ -29,6 +31,7 @@ class AuthPasswordField extends StatelessWidget {
       hint: hint,
       controller: controller,
       obscureText: obscureText,
+      textInputAction: textInputAction,
       validator: validator,
       onChanged: onChanged,
       prefixIcon: SvgWidget(svgPath: SvgEnum.unlock.svgPath, color: AppColors.white).allPadding(12),
